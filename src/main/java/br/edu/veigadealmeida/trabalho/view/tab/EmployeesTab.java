@@ -38,6 +38,7 @@ public class EmployeesTab extends javax.swing.JPanel {
     
     /**
      * Creates new form EmployeesDisplay
+     * @param employee
      */
     public EmployeesTab(Employee employee) { //Iniciado exibição de funcionários
         initComponents(); //Código gerado

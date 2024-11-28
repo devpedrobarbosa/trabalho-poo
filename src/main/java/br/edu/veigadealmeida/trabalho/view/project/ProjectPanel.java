@@ -4,12 +4,15 @@
  */
 package br.edu.veigadealmeida.trabalho.view.project;
 
+import br.edu.veigadealmeida.trabalho.manager.CustomerManager;
 import br.edu.veigadealmeida.trabalho.manager.EmployeeManager;
 import br.edu.veigadealmeida.trabalho.manager.ProjectManager;
+import br.edu.veigadealmeida.trabalho.manager.TaskManager;
 import br.edu.veigadealmeida.trabalho.model.Customer;
 import br.edu.veigadealmeida.trabalho.model.Employee;
 import br.edu.veigadealmeida.trabalho.model.Model;
 import br.edu.veigadealmeida.trabalho.model.Project;
+import java.text.SimpleDateFormat;
 
 /**
  *
@@ -25,26 +28,36 @@ public class ProjectPanel extends javax.swing.JPanel {
     private Project project;
     private ProjectManager projectManager;
     private EmployeeManager employeeManager;
+    private TaskManager taskManager;
+    private CustomerManager customerManager;
     
     /**
      * Essa classe representa um Componente, que é um pedaço de tela que pode ser preenchido com
      * dados de um determinado objeto fornecido, nesse caso, trata-se de um retângulo avulso que
      * mostra as informações do
+     * @param model
      * @param project
      * recebido no construtor da classe
+     * @param projectManager
+     * @param employeeManager
+     * @param taskManager
+     * @param customerManager
      */
-    public ProjectPanel(Model model, Project project, ProjectManager projectManager, EmployeeManager employeeManager) {
+    public ProjectPanel(Model model, Project project, ProjectManager projectManager, EmployeeManager employeeManager, TaskManager taskManager, CustomerManager customerManager) {
         initComponents();
         if(!(model instanceof Employee) && !(model instanceof Customer)) return;
         this.model = model;
         this.project = project;
         this.projectManager = projectManager;
         this.employeeManager = employeeManager;
+        this.taskManager = taskManager;
+        this.customerManager = customerManager;
         this.name.setText(project.getName());
         this.description.setText(project.getDescription());
         this.partner.setText(project.getPartner());
         this.responsibleEmployee.setText(project.getResponsibleEmployee());
         this.status.setText(project.getStatus().getDisplayName());
+        this.endTerm.setText(project.getEndTerm() == null ? "Não definido" : new SimpleDateFormat("dd/MM/yyyy").format(project.getEndTerm()));
         if(!(model instanceof Employee))
             details.setEnabled(false);
     }
@@ -69,6 +82,8 @@ public class ProjectPanel extends javax.swing.JPanel {
         scrollPane = new javax.swing.JScrollPane();
         description = new javax.swing.JTextPane();
         jLabel1 = new javax.swing.JLabel();
+        statusLabel1 = new javax.swing.JLabel();
+        endTerm = new javax.swing.JLabel();
 
         setMinimumSize(new java.awt.Dimension(835, 125));
         setPreferredSize(new java.awt.Dimension(835, 125));
@@ -118,17 +133,26 @@ public class ProjectPanel extends javax.swing.JPanel {
 
         jLabel1.setText("Descrição:");
         add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 30, -1, -1));
+
+        statusLabel1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        statusLabel1.setText("Prazo");
+        add(statusLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 60, -1, -1));
+
+        endTerm.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
+        endTerm.setText("Project end term");
+        add(endTerm, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 80, -1, -1));
     }// </editor-fold>//GEN-END:initComponents
 
     private void detailsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_detailsActionPerformed
         // TODO add your handling code here:
-        new ProjectOverview((Employee) model, project, projectManager, employeeManager).setVisible(true);
+        new ProjectOverview((Employee) model, project, projectManager, employeeManager, taskManager, customerManager).setVisible(true);
     }//GEN-LAST:event_detailsActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextPane description;
     private javax.swing.JButton details;
+    private javax.swing.JLabel endTerm;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel name;
     private javax.swing.JLabel partner;
@@ -138,5 +162,6 @@ public class ProjectPanel extends javax.swing.JPanel {
     private javax.swing.JScrollPane scrollPane;
     private javax.swing.JLabel status;
     private javax.swing.JLabel statusLabel;
+    private javax.swing.JLabel statusLabel1;
     // End of variables declaration//GEN-END:variables
 }

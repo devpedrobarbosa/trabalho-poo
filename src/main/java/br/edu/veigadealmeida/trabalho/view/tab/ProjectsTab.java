@@ -4,12 +4,15 @@
  */
 package br.edu.veigadealmeida.trabalho.view.tab;
 
+import br.edu.veigadealmeida.trabalho.Main;
 import br.edu.veigadealmeida.trabalho.database.CustomerDatabase;
 import br.edu.veigadealmeida.trabalho.database.EmployeeDatabase;
 import br.edu.veigadealmeida.trabalho.database.ProjectDatabase;
+import br.edu.veigadealmeida.trabalho.database.TaskDatabase;
 import br.edu.veigadealmeida.trabalho.manager.CustomerManager;
 import br.edu.veigadealmeida.trabalho.manager.EmployeeManager;
 import br.edu.veigadealmeida.trabalho.manager.ProjectManager;
+import br.edu.veigadealmeida.trabalho.manager.TaskManager;
 import br.edu.veigadealmeida.trabalho.model.Customer;
 import br.edu.veigadealmeida.trabalho.model.Employee;
 import br.edu.veigadealmeida.trabalho.model.Model;
@@ -19,7 +22,10 @@ import br.edu.veigadealmeida.trabalho.model.enums.ProjectStatus;
 import br.edu.veigadealmeida.trabalho.view.project.AddProjectView;
 import br.edu.veigadealmeida.trabalho.view.project.ProjectPanel;
 import java.util.Date;
+import java.util.Map;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JSeparator;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -30,13 +36,17 @@ public class ProjectsTab extends javax.swing.JPanel {
     private static final ProjectDatabase projectDatabase = new ProjectDatabase();
     private static final EmployeeDatabase employeeDatabase = new EmployeeDatabase();
     private static final CustomerDatabase customerDatabase = new CustomerDatabase();
+    private static final TaskDatabase taskDatabase = new TaskDatabase();
     private final Model model;
     private ProjectManager projectManager;
     private EmployeeManager employeeManager;
     private CustomerManager customerManager;
+    private TaskManager taskManager;
+  
     
     /**
      * Creates new form ProjectsTab
+     * @param model
      */
     public ProjectsTab(Model model) {
         initComponents();
@@ -45,6 +55,7 @@ public class ProjectsTab extends javax.swing.JPanel {
         projectManager = new ProjectManager(projectDatabase);
         employeeManager = new EmployeeManager(employeeDatabase);
         customerManager = new CustomerManager(customerDatabase);
+        taskManager = new TaskManager(taskDatabase);
         boolean first = true;
         for(Project project : projectManager.getAllTypes()) {
             if(project.getStatus() != ProjectStatus.FINISHED && project.getEndTerm() != null && new Date().after(project.getEndTerm())) {
@@ -57,7 +68,7 @@ public class ProjectsTab extends javax.swing.JPanel {
                 continue;
             if(first) first = false;
             else projects.add(new JSeparator());
-            projects.add(new ProjectPanel(model, project, projectManager, new EmployeeManager(employeeDatabase)));
+            projects.add(new ProjectPanel(model, project, projectManager, employeeManager, taskManager, customerManager));
         }
         if(model instanceof Customer || (model instanceof Employee employee && employee.getDepartment().ordinal() < Department.PMO.ordinal()))
             addButton.setEnabled(false);
@@ -207,7 +218,8 @@ public class ProjectsTab extends javax.swing.JPanel {
         // TODO add your handling code here:
         new AddProjectView((Employee) model, projectManager, customerManager, employeeManager).setVisible(true);
     }//GEN-LAST:event_addButtonActionPerformed
-
+                     
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addButton;

@@ -5,12 +5,7 @@
 package br.edu.veigadealmeida.trabalho.view;
 
 import br.edu.veigadealmeida.trabalho.model.Customer;
-import br.edu.veigadealmeida.trabalho.model.Employee;
 import br.edu.veigadealmeida.trabalho.view.tab.CustomerProfileTab;
-import br.edu.veigadealmeida.trabalho.view.tab.EmployeesTab;
-import br.edu.veigadealmeida.trabalho.view.tab.OverviewTab;
-import br.edu.veigadealmeida.trabalho.view.tab.CustomersTab;
-import br.edu.veigadealmeida.trabalho.view.tab.EmployeeProfileTab;
 import br.edu.veigadealmeida.trabalho.view.tab.ProjectsTab;
 import java.awt.Color;
 import java.util.function.Function;
@@ -31,7 +26,6 @@ public class CustomerAppView extends javax.swing.JFrame {
     * do código
     */
     public enum Pages {
-        OVERVIEW(o -> new OverviewTab()),
         PROJECTS(o -> new ProjectsTab((Customer) o)),
         PROFILE(o -> new CustomerProfileTab((Customer) o));
         
@@ -76,7 +70,7 @@ public class CustomerAppView extends javax.swing.JFrame {
         setResizable(false); //Não permitir que seja redimensionada
         buttonBackgroundColor = new Color(122, 178, 211); //Armazena a cor padrão dos botões para facilitar o desenvolvimento
         darkerButtonBackgroundColor = new Color(112, 168, 201); //Nesse caso, a cor quando o botão está selecionado
-        handleSwitch(Pages.OVERVIEW, null, overviewTab); //Realiza a abertura da página padrão
+        handleSwitch(Pages.PROJECTS, null, projectsTab); //Realiza a abertura da página padrão
         instance = this; //Recebe a instância atual da classe, para ser acessada estáticamente por outras classes
         this.customer = customer; //Recebe o funcionário que logou no sistema
     }
@@ -92,7 +86,6 @@ public class CustomerAppView extends javax.swing.JFrame {
 
         jMenuItem1 = new javax.swing.JMenuItem();
         navigation = new javax.swing.JPanel();
-        overviewTab = new javax.swing.JButton();
         projectsTab = new javax.swing.JButton();
         profileTab = new javax.swing.JButton();
         display = new javax.swing.JLayeredPane();
@@ -111,28 +104,6 @@ public class CustomerAppView extends javax.swing.JFrame {
 
         navigation.setBackground(new java.awt.Color(122, 178, 211));
         navigation.setPreferredSize(new java.awt.Dimension(150, 500));
-
-        overviewTab.setBackground(new java.awt.Color(122, 178, 211));
-        overviewTab.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        overviewTab.setForeground(new java.awt.Color(255, 255, 255));
-        overviewTab.setIcon(new javax.swing.ImageIcon(getClass().getResource("/overview-icon.png"))); // NOI18N
-        overviewTab.setText("Visão Geral");
-        overviewTab.setBorder(null);
-        overviewTab.setIconTextGap(10);
-        overviewTab.setPreferredSize(new java.awt.Dimension(150, 50));
-        overviewTab.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                buttonMouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                buttonMouseExited(evt);
-            }
-        });
-        overviewTab.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                switchToOverview(evt);
-            }
-        });
 
         projectsTab.setBackground(new java.awt.Color(122, 178, 211));
         projectsTab.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
@@ -182,19 +153,17 @@ public class CustomerAppView extends javax.swing.JFrame {
         navigation.setLayout(navigationLayout);
         navigationLayout.setHorizontalGroup(
             navigationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(overviewTab, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(projectsTab, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(profileTab, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         navigationLayout.setVerticalGroup(
             navigationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(navigationLayout.createSequentialGroup()
-                .addComponent(overviewTab, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addContainerGap()
                 .addComponent(projectsTab, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(profileTab, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(348, Short.MAX_VALUE))
+                .addContainerGap(398, Short.MAX_VALUE))
         );
 
         getContentPane().add(navigation, java.awt.BorderLayout.LINE_START);
@@ -320,12 +289,6 @@ public class CustomerAppView extends javax.swing.JFrame {
         revalidate();
     }
     
-    //Ao clicar em Visão Geral, exibe conteúdo da tela em questão
-    private void switchToOverview(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_switchToOverview
-        // TODO add your handling code here:
-        handleSwitch(Pages.OVERVIEW, null, (JButton) evt.getSource());
-    }//GEN-LAST:event_switchToOverview
-
     //Lógica adotada: repete todo o processo de abertura da página
     private void updateVisualization() {
         handleSwitch(openedPage, currentPageObject, selectedButton);
@@ -373,7 +336,6 @@ public class CustomerAppView extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuBar menu;
     private javax.swing.JPanel navigation;
-    private javax.swing.JButton overviewTab;
     private javax.swing.JButton profileTab;
     private javax.swing.JButton projectsTab;
     private javax.swing.JMenuItem updateVisualizationButton;

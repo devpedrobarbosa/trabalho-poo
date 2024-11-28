@@ -4,8 +4,8 @@
  */
 package br.edu.veigadealmeida.trabalho.database;
 
-import br.edu.veigadealmeida.trabalho.model.Model;
 import br.edu.veigadealmeida.trabalho.model.Task;
+import java.util.List;
 
 /**
  *
@@ -15,5 +15,9 @@ public class TaskDatabase extends DatabaseImpl<String, Task> {
 
     public TaskDatabase() {
         super("tasks", Task.class);
+    }
+    
+    public List<Task> findTasksByProject(String project) {
+        return findAll().stream().filter(t -> t.getProject().equalsIgnoreCase(project)).toList();
     }
 }

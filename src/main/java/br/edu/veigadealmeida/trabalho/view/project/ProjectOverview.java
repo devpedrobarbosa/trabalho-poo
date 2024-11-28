@@ -4,22 +4,29 @@
  */
 package br.edu.veigadealmeida.trabalho.view.project;
 
-import br.edu.veigadealmeida.trabalho.database.ProjectDatabase;
+import br.edu.veigadealmeida.trabalho.manager.CustomerManager;
 import br.edu.veigadealmeida.trabalho.manager.EmployeeManager;
 import br.edu.veigadealmeida.trabalho.manager.ProjectManager;
+import br.edu.veigadealmeida.trabalho.manager.TaskManager;
 import br.edu.veigadealmeida.trabalho.model.Employee;
 import br.edu.veigadealmeida.trabalho.model.Project;
+import br.edu.veigadealmeida.trabalho.model.Task;
 import br.edu.veigadealmeida.trabalho.model.enums.Department;
 import br.edu.veigadealmeida.trabalho.model.enums.ProjectStatus;
 import br.edu.veigadealmeida.trabalho.util.Util;
 import br.edu.veigadealmeida.trabalho.view.AdminAppView;
 import br.edu.veigadealmeida.trabalho.view.EmployeeAppView;
+import br.edu.veigadealmeida.trabalho.view.task.AddTaskView;
+import br.edu.veigadealmeida.trabalho.view.task.DeleteTaskView;
+import br.edu.veigadealmeida.trabalho.view.task.EditTaskView;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Collections;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.stream.Stream;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 
 /**
  *
@@ -33,11 +40,20 @@ public class ProjectOverview extends javax.swing.JFrame {
     private final Project project;
     private final ProjectManager projectManager;
     private final EmployeeManager employeeManager;
+    private final CustomerManager customerManager;
+    private final TaskManager taskManager;
+    private final String[] columns = new String[]{"ID", "Nome", "Projeto", "Responsável", "Início", "Prazo"};
     
     /**
      * Creates new form ProjectOverview
+     * @param employee
+     * @param project
+     * @param projectManager
+     * @param employeeManager
+     * @param taskManager
+     * @param customerManager
      */
-    public ProjectOverview(Employee employee, Project project, ProjectManager projectManager, EmployeeManager manager) {
+    public ProjectOverview(Employee employee, Project project, ProjectManager projectManager, EmployeeManager employeeManager, TaskManager taskManager, CustomerManager customerManager) {
         initComponents();
         setResizable(false);
         setLocationRelativeTo(null);
@@ -45,9 +61,11 @@ public class ProjectOverview extends javax.swing.JFrame {
         this.employee = employee;
         this.project = project;
         this.projectManager = projectManager;
-        employeeManager = manager;
-        title.setText("Projeto " + project.getName());
-        nameField.setText(project.getName());
+        this.employeeManager = employeeManager;
+        this.customerManager = customerManager;
+        this.taskManager = taskManager;
+        title.setText("Projeto #" + project.getName());
+        customerField.setText(project.getPartner());
         responsibleEmployeeSelector.setModel(new DefaultComboBoxModel<>(employeeManager.getAllTypes().stream().filter(e -> e.getDepartment().equals(Department.PMO)).map(Employee::getName).toList().toArray(new String[0])));
         responsibleEmployeeSelector.setSelectedItem(project.getResponsibleEmployee());
         descriptionField.setText(project.getDescription());
@@ -57,20 +75,38 @@ public class ProjectOverview extends javax.swing.JFrame {
         if(project.getEndTerm() != null)
             endTermField.setText(writerFormat.format(project.getEndTerm()));
         if(employee.getDepartment().ordinal() < Department.PMO.ordinal()) {
-            nameField.setEnabled(false);
+            customerField.setEnabled(false);
             responsibleEmployeeSelector.setEnabled(false);
             descriptionField.setEnabled(false);
             saveButton.setEnabled(false);
             finishButton.setEnabled(false);
             startField.setEnabled(false);
             endTermField.setEnabled(false);
+            
+            addTaskButton.setEnabled(false);
+            editTaskButton.setEnabled(false);
+            deleteTaskButton.setEnabled(false);
         }
         if(project.getStart() != null)
             startButton.setEnabled(false);
         if(project.getStatus().equals(ProjectStatus.CREATED) || project.getStatus().equals(ProjectStatus.FINISHED))
             finishButton.setEnabled(false);
+        if(project.getStatus().equals(ProjectStatus.FINISHED)) {
+            addTaskButton.setEnabled(false);
+            editTaskButton.setEnabled(false);
+            deleteTaskButton.setEnabled(false);
+        }
+        tasksTable.setModel(new DefaultTableModel(taskManager.toDataArray(taskManager.getAllTypes().stream().filter(t -> t.getProject().equalsIgnoreCase(project.getName())).toList()), columns)); //Definição dos dados da tabela (efetivamente, os usuários que aparecerão)
+        fixColumnWidth(); //Garante que todas as colunas tenham tamanhos propícios ao texto contido nas células
+        tasksTable.setDefaultEditor(Object.class, null);
     }
-
+    
+    private void fixColumnWidth() {
+        Enumeration<TableColumn> tableColumns = tasksTable.getColumnModel().getColumns();
+        while(tableColumns.hasMoreElements()) //Para cada coluna
+            tableColumns.nextElement().setMinWidth(150); //Define largura de 150
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -81,50 +117,56 @@ public class ProjectOverview extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
-        nameField = new javax.swing.JTextField();
-        jLabel3 = new javax.swing.JLabel();
+        customerLabel = new javax.swing.JLabel();
+        customerField = new javax.swing.JTextField();
+        responsibleEmployeeLabel = new javax.swing.JLabel();
         responsibleEmployeeSelector = new javax.swing.JComboBox<>();
-        jLabel4 = new javax.swing.JLabel();
+        descriptionLabel = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         descriptionField = new javax.swing.JTextArea();
-        jLabel5 = new javax.swing.JLabel();
+        statusLabel = new javax.swing.JLabel();
         statusField = new javax.swing.JComboBox<>();
-        jLabel6 = new javax.swing.JLabel();
+        startLabel = new javax.swing.JLabel();
         startField = new javax.swing.JFormattedTextField();
         endTermField = new javax.swing.JFormattedTextField();
-        jLabel7 = new javax.swing.JLabel();
+        endTermLabel = new javax.swing.JLabel();
         title = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        tasksTable = new javax.swing.JTable();
         jPanel2 = new javax.swing.JPanel();
         saveButton = new javax.swing.JButton();
         finishButton = new javax.swing.JButton();
         startButton = new javax.swing.JButton();
+        deleteTaskButton = new javax.swing.JButton();
+        editTaskButton = new javax.swing.JButton();
+        addTaskButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.PAGE_AXIS));
 
-        jLabel2.setText("Cliente");
+        customerLabel.setText("Cliente");
 
-        nameField.setText("Client name");
-        nameField.addActionListener(new java.awt.event.ActionListener() {
+        customerField.setText("Client name");
+        customerField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                nameFieldActionPerformed(evt);
+                customerFieldActionPerformed(evt);
             }
         });
 
-        jLabel3.setText("Funcionário Alocado");
+        responsibleEmployeeLabel.setText("Funcionário Alocado");
 
-        jLabel4.setText("Descrição");
+        descriptionLabel.setText("Descrição");
 
         descriptionField.setColumns(20);
         descriptionField.setRows(5);
         jScrollPane1.setViewportView(descriptionField);
 
-        jLabel5.setText("Status");
+        statusLabel.setText("Status");
 
         statusField.setEnabled(false);
 
-        jLabel6.setText("Início");
+        startLabel.setText("Início");
 
         try {
             startField.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##/##/####")));
@@ -138,11 +180,26 @@ public class ProjectOverview extends javax.swing.JFrame {
             ex.printStackTrace();
         }
 
-        jLabel7.setText("Prazo");
+        endTermLabel.setText("Prazo");
 
         title.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         title.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         title.setText("Projeto #");
+
+        jLabel1.setText("Tarefas");
+
+        tasksTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {},
+                {},
+                {},
+                {}
+            },
+            new String [] {
+
+            }
+        ));
+        jScrollPane3.setViewportView(tasksTable);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -154,31 +211,31 @@ public class ProjectOverview extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(nameField, javax.swing.GroupLayout.DEFAULT_SIZE, 135, Short.MAX_VALUE)
-                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jLabel3)
-                                .addComponent(responsibleEmployeeSelector, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addComponent(jLabel4)
+                                .addComponent(customerField, javax.swing.GroupLayout.DEFAULT_SIZE, 135, Short.MAX_VALUE)
+                                .addComponent(responsibleEmployeeLabel)
+                                .addComponent(responsibleEmployeeSelector, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(customerLabel))
+                            .addComponent(descriptionLabel)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(35, 35, 35)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(endTermField, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(startField)
+                            .addComponent(statusField, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(endTermField, javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(startField)
-                                    .addComponent(statusField, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGap(109, 109, 109)))
-                                .addGap(30, 30, 30))))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(title, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addContainerGap())))
+                                    .addComponent(startLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(endTermLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(statusLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(109, 109, 109)))
+                        .addGap(46, 46, 46)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel1)
+                                .addGap(310, 310, 310))
+                            .addComponent(jScrollPane3)))
+                    .addComponent(title, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -187,32 +244,35 @@ public class ProjectOverview extends javax.swing.JFrame {
                 .addComponent(title)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel5))
+                    .addComponent(customerLabel)
+                    .addComponent(statusLabel)
+                    .addComponent(jLabel1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(nameField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(statusField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel6))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(responsibleEmployeeSelector, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(startField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel4)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(17, 17, 17))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel7)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(customerField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(statusField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(endTermField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(responsibleEmployeeLabel)
+                            .addComponent(startLabel))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(responsibleEmployeeSelector, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(startField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(descriptionLabel)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(endTermLabel)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(endTermField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addContainerGap(10, Short.MAX_VALUE))
         );
 
         getContentPane().add(jPanel1);
@@ -242,6 +302,27 @@ public class ProjectOverview extends javax.swing.JFrame {
             }
         });
 
+        deleteTaskButton.setText("Apagar Task");
+        deleteTaskButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteTaskButtonActionPerformed(evt);
+            }
+        });
+
+        editTaskButton.setText("Alterar Task");
+        editTaskButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                editTaskButtonActionPerformed(evt);
+            }
+        });
+
+        addTaskButton.setText("Cadastrar Task");
+        addTaskButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addTaskButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -253,7 +334,13 @@ public class ProjectOverview extends javax.swing.JFrame {
                 .addComponent(startButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(finishButton)
-                .addContainerGap(61, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 226, Short.MAX_VALUE)
+                .addComponent(addTaskButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(editTaskButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(deleteTaskButton)
+                .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -262,7 +349,10 @@ public class ProjectOverview extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(saveButton)
                     .addComponent(finishButton)
-                    .addComponent(startButton))
+                    .addComponent(startButton)
+                    .addComponent(deleteTaskButton)
+                    .addComponent(editTaskButton)
+                    .addComponent(addTaskButton))
                 .addContainerGap(21, Short.MAX_VALUE))
         );
 
@@ -271,13 +361,13 @@ public class ProjectOverview extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void nameFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nameFieldActionPerformed
+    private void customerFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_customerFieldActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_nameFieldActionPerformed
+    }//GEN-LAST:event_customerFieldActionPerformed
 
     private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
         // TODO add your handling code here:
-        String validationError = Util.validateFields(nameField, null, null, null, null, null, null, null, null);
+        String validationError = Util.validateFields(customerField, null, null, null, null, null, null, null, null);
         if(validationError != null) {
             Util.showError(this, validationError);
             return;
@@ -287,7 +377,7 @@ public class ProjectOverview extends javax.swing.JFrame {
             Util.showError(this, "Funcionário não encontrado.");
             return;
         }
-        String name = nameField.getText(), responsibleEmployee = responsibleEmployeeSelector.getItemAt(responsibleEmployeeSelector.getSelectedIndex()), description = descriptionField.getText();
+        String name = customerField.getText(), responsibleEmployee = responsibleEmployeeSelector.getItemAt(responsibleEmployeeSelector.getSelectedIndex()), description = descriptionField.getText();
         projectManager.getAllTypes().removeIf(p -> p.getName().equalsIgnoreCase(project.getName()));
         project.setName(name);
         project.setResponsibleEmployee(responsibleEmployee);
@@ -343,26 +433,62 @@ public class ProjectOverview extends javax.swing.JFrame {
         else EmployeeAppView.requestUpdateVisualization();
     }//GEN-LAST:event_finishButtonActionPerformed
 
+    private void addTaskButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addTaskButtonActionPerformed
+        // TODO add your handling code here:
+        new AddTaskView(employee, this, projectManager, customerManager, employeeManager, taskManager).setVisible(true);
+    }//GEN-LAST:event_addTaskButtonActionPerformed
 
+    private void editTaskButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editTaskButtonActionPerformed
+        // TODO add your handling code here:
+        if(tasksTable.getSelectedRowCount() < 1) {
+            Util.showError(this, "Selecione 1 task para alterar");
+            return;
+        }
+        final String taskName = tasksTable.getValueAt(tasksTable.getSelectedRow(), 1).toString();
+        final Task task = taskManager.getType(taskName);
+        if(task == null) {
+            System.out.println(taskName);
+            Util.showError(this, "Task não encontrada.");
+            return;
+        }
+        new EditTaskView(employee, task, this, projectManager, customerManager, employeeManager, taskManager).setVisible(true);
+    }//GEN-LAST:event_editTaskButtonActionPerformed
+
+    private void deleteTaskButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteTaskButtonActionPerformed
+        // TODO add your handling code here:
+        new DeleteTaskView(taskManager).setVisible(true);
+    }//GEN-LAST:event_deleteTaskButtonActionPerformed
+
+
+    public void update() {
+        tasksTable.setModel(new DefaultTableModel(taskManager.toDataArray(taskManager.getAllTypes().stream().filter(t -> t.getProject().equalsIgnoreCase(project.getName())).toList()), columns)); //Definição dos dados da tabela (efetivamente, os usuários que aparecerão)
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton addTaskButton;
+    private javax.swing.JTextField customerField;
+    private javax.swing.JLabel customerLabel;
+    private javax.swing.JButton deleteTaskButton;
     private javax.swing.JTextArea descriptionField;
+    private javax.swing.JLabel descriptionLabel;
+    private javax.swing.JButton editTaskButton;
     private javax.swing.JFormattedTextField endTermField;
+    private javax.swing.JLabel endTermLabel;
     private javax.swing.JButton finishButton;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField nameField;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JLabel responsibleEmployeeLabel;
     private javax.swing.JComboBox<String> responsibleEmployeeSelector;
     private javax.swing.JButton saveButton;
     private javax.swing.JButton startButton;
     private javax.swing.JFormattedTextField startField;
+    private javax.swing.JLabel startLabel;
     private javax.swing.JComboBox<String> statusField;
+    private javax.swing.JLabel statusLabel;
+    private javax.swing.JTable tasksTable;
     private javax.swing.JLabel title;
     // End of variables declaration//GEN-END:variables
 }
