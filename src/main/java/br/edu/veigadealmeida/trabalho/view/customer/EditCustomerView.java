@@ -39,6 +39,7 @@ public class EditCustomerView extends javax.swing.JFrame {
         this.partner = partner;
         nameField.setText(partner.getName());
         documentField.setText(partner.getDocument());
+        documentField.setEnabled(false);
         addressField.setText(partner.getAddress());
         phoneField.setText(partner.getPhone());
         emailField.setText(partner.getEmail());
@@ -100,8 +101,8 @@ public class EditCustomerView extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
 
-        panel.setMinimumSize(new java.awt.Dimension(450, 325));
-        panel.setPreferredSize(new java.awt.Dimension(450, 325));
+        panel.setMinimumSize(new java.awt.Dimension(450, 350));
+        panel.setPreferredSize(new java.awt.Dimension(450, 350));
         panel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         title.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
@@ -302,12 +303,12 @@ public class EditCustomerView extends javax.swing.JFrame {
 
     private void editClick(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editClick
         // TODO add your handling code here:
-        String validationError = Util.validateFields(nameField, null, documentField, addressField, phoneField, emailField, loginField, passwordField, representativeField);
+        String validationError = Util.validateFields(nameField, null, null, addressField, phoneField, emailField, loginField, passwordField, representativeField);
         if(validationError != null) {
             Util.showError(this, validationError);
             return;
         }
-        String name = nameField.getText(), document = documentField.getText(), address = addressField.getText(), phone = phoneField.getText(), email = emailField.getText(), representative = representativeField.getText(), login = loginField.getText(), password = passwordField.getText();
+        String name = nameField.getText(), address = addressField.getText(), phone = phoneField.getText(), email = emailField.getText(), representative = representativeField.getText(), login = loginField.getText(), password = passwordField.getText();
         Employee employee = employeeManager.getType(responsibleEmployeeSelector.getItemAt(responsibleEmployeeSelector.getSelectedIndex()));
         if(employee == null) {
             Util.showError(this, "Funcionário não encontrado.");
@@ -315,7 +316,6 @@ public class EditCustomerView extends javax.swing.JFrame {
         }
         partnerManager.getAllTypes().removeIf(p -> p.getDocument().equals(partner.getDocument()));
         partner.setName(name);
-        partner.setDocument(document);
         partner.setAddress(address);
         partner.setPhone(phone);
         partner.setEmail(email);

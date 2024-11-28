@@ -4,9 +4,21 @@
  */
 package br.edu.veigadealmeida.trabalho.view.tab;
 
+import br.edu.veigadealmeida.trabalho.database.CustomerDatabase;
+import br.edu.veigadealmeida.trabalho.database.EmployeeDatabase;
 import br.edu.veigadealmeida.trabalho.database.ProjectDatabase;
+import br.edu.veigadealmeida.trabalho.manager.CustomerManager;
+import br.edu.veigadealmeida.trabalho.manager.EmployeeManager;
+import br.edu.veigadealmeida.trabalho.manager.ProjectManager;
+import br.edu.veigadealmeida.trabalho.model.Customer;
+import br.edu.veigadealmeida.trabalho.model.Employee;
+import br.edu.veigadealmeida.trabalho.model.Model;
 import br.edu.veigadealmeida.trabalho.model.Project;
+import br.edu.veigadealmeida.trabalho.model.enums.Department;
+import br.edu.veigadealmeida.trabalho.model.enums.ProjectStatus;
+import br.edu.veigadealmeida.trabalho.view.project.AddProjectView;
 import br.edu.veigadealmeida.trabalho.view.project.ProjectPanel;
+import java.util.Date;
 import javax.swing.JSeparator;
 
 /**
@@ -15,19 +27,40 @@ import javax.swing.JSeparator;
  */
 public class ProjectsTab extends javax.swing.JPanel {
 
-    private static final ProjectDatabase database = new ProjectDatabase();
+    private static final ProjectDatabase projectDatabase = new ProjectDatabase();
+    private static final EmployeeDatabase employeeDatabase = new EmployeeDatabase();
+    private static final CustomerDatabase customerDatabase = new CustomerDatabase();
+    private final Model model;
+    private ProjectManager projectManager;
+    private EmployeeManager employeeManager;
+    private CustomerManager customerManager;
     
     /**
      * Creates new form ProjectsTab
      */
-    public ProjectsTab() {
+    public ProjectsTab(Model model) {
         initComponents();
+        this.model = model;
+        if(!(model instanceof Employee) && !(model instanceof Customer)) return;
+        projectManager = new ProjectManager(projectDatabase);
+        employeeManager = new EmployeeManager(employeeDatabase);
+        customerManager = new CustomerManager(customerDatabase);
         boolean first = true;
-        for(Project project : database.findAll()) {
+        for(Project project : projectManager.getAllTypes()) {
+            if(project.getStatus() != ProjectStatus.FINISHED && project.getEndTerm() != null && new Date().after(project.getEndTerm())) {
+                projectManager.getAllTypes().removeIf(p -> p.getName().equalsIgnoreCase(project.getName()));
+                project.setStatus(ProjectStatus.PENDING);
+                projectManager.getAllTypes().add(project);
+                projectDatabase.save(projectManager.getAllTypes());
+            }
+            if(model instanceof Customer customer && !project.getPartner().equals(customer.getName()))
+                continue;
             if(first) first = false;
             else projects.add(new JSeparator());
-            projects.add(new ProjectPanel(project));
+            projects.add(new ProjectPanel(model, project, projectManager, new EmployeeManager(employeeDatabase)));
         }
+        if(model instanceof Customer || (model instanceof Employee employee && employee.getDepartment().ordinal() < Department.PMO.ordinal()))
+            addButton.setEnabled(false);
     }
 
     /**
@@ -46,7 +79,7 @@ public class ProjectsTab extends javax.swing.JPanel {
         filterButton = new javax.swing.JButton();
         resetFilterButton = new javax.swing.JButton();
         buttonBar = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
+        addButton = new javax.swing.JButton();
         scrollPane = new javax.swing.JScrollPane();
         projects = new javax.swing.JPanel();
 
@@ -124,10 +157,10 @@ public class ProjectsTab extends javax.swing.JPanel {
         buttonBar.setMinimumSize(new java.awt.Dimension(100, 35));
         buttonBar.setPreferredSize(new java.awt.Dimension(877, 35));
 
-        jButton1.setText("Cadastrar Projeto");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        addButton.setText("Cadastrar Projeto");
+        addButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                addButtonActionPerformed(evt);
             }
         });
 
@@ -137,13 +170,13 @@ public class ProjectsTab extends javax.swing.JPanel {
             buttonBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(buttonBarLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jButton1)
+                .addComponent(addButton)
                 .addContainerGap(749, Short.MAX_VALUE))
         );
         buttonBarLayout.setVerticalGroup(
             buttonBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(buttonBarLayout.createSequentialGroup()
-                .addComponent(jButton1)
+                .addComponent(addButton)
                 .addGap(0, 12, Short.MAX_VALUE))
         );
 
@@ -170,16 +203,17 @@ public class ProjectsTab extends javax.swing.JPanel {
         queryField.setText("");
     }//GEN-LAST:event_resetFilterButtonresetFilter
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+        new AddProjectView((Employee) model, projectManager, customerManager, employeeManager).setVisible(true);
+    }//GEN-LAST:event_addButtonActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton addButton;
     private javax.swing.JPanel buttonBar;
     private javax.swing.JButton filterButton;
     private javax.swing.JComboBox<String> filterSelector;
-    private javax.swing.JButton jButton1;
     private javax.swing.JPanel projects;
     private javax.swing.JTextField queryField;
     private javax.swing.JButton resetFilterButton;

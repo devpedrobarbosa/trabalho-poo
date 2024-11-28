@@ -8,7 +8,7 @@ import br.edu.veigadealmeida.trabalho.model.Employee;
 import br.edu.veigadealmeida.trabalho.view.tab.EmployeesTab;
 import br.edu.veigadealmeida.trabalho.view.tab.OverviewTab;
 import br.edu.veigadealmeida.trabalho.view.tab.CustomersTab;
-import br.edu.veigadealmeida.trabalho.view.tab.ProfileTab;
+import br.edu.veigadealmeida.trabalho.view.tab.EmployeeProfileTab;
 import br.edu.veigadealmeida.trabalho.view.tab.ProjectsTab;
 import java.awt.Color;
 import java.util.function.Function;
@@ -32,8 +32,8 @@ public class AdminAppView extends javax.swing.JFrame {
         OVERVIEW(o -> new OverviewTab()),
         EMPLOYEES(o -> new EmployeesTab((Employee) o)),
         PARTNERS(o -> new CustomersTab((Employee) o)),
-        PROJECTS(o -> new ProjectsTab()),
-        PROFILE(o -> new ProfileTab((Employee) o));
+        PROJECTS(o -> new ProjectsTab((Employee) o)),
+        PROFILE(o -> new EmployeeProfileTab((Employee) o));
         
         final Function<Object, JPanel> makePanel;
         

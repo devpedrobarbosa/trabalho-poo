@@ -13,12 +13,12 @@ import br.edu.veigadealmeida.trabalho.view.LoginView;
  *
  * @author Pedro
  */
-public class ProfileTab extends javax.swing.JPanel {
+public class EmployeeProfileTab extends javax.swing.JPanel {
     
     /**
      * Creates new form ProfileTab
      */
-    public ProfileTab(Employee employee) {
+    public EmployeeProfileTab(Employee employee) {
         initComponents();
         name.setText(employee.getName());
         department.setText(employee.getDepartment().getDisplayName());

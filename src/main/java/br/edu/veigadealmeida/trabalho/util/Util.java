@@ -5,6 +5,7 @@
 package br.edu.veigadealmeida.trabalho.util;
 
 import java.awt.Component;
+import java.util.UUID;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
@@ -66,17 +67,17 @@ public class Util {
     
     //Método que valida de uma vez uma série de fields
     public static String validateFields(JTextField name, JTextField cpf, JTextField cnpj, JTextField address, JTextField phone, JTextField email, JTextField login, JTextField password, JTextField representative) {
-        if (!Util.isValidName(name.getText()))
+        if (name != null && !Util.isValidName(name.getText()))
             return "Insira um nome válido: primeira letra dos nomes deve ser maiúscula, pode-se utilizar ' e -";
         if (cpf != null && !Util.isValidCPF(replaceDocumentMask(cpf.getText())))
             return "Insira um CPF válido: 11 dígitos numéricos";
         if (cnpj != null && !Util.isValidCNPJ(replaceDocumentMask(cnpj.getText())))
             return "Insira um CNPJ válido: 14 dígitos numéricos";
-        if (!Util.isValidAddress(address.getText()))
+        if (address != null && !Util.isValidAddress(address.getText()))
             return "Insira um endereço válido";
-        if (!Util.isValidPhone(phone.getText()))
+        if (phone != null && !Util.isValidPhone(phone.getText()))
             return "Insira um telefone válido";
-        if (!Util.isValidEmail(email.getText()))
+        if (email != null && !Util.isValidEmail(email.getText()))
             return "Insira um e-mail válido";
         if (login != null && !Util.isValidLogin(login.getText()))
             return "Insira um login válido: deve ter 5 a 20 caracteres contendo somente letras, números, pontos e underlines";
@@ -99,5 +100,9 @@ public class Util {
     //Método que pergunta se o usuário quer realmente confirmar uma ação, e retorna um boolean dizendo se sim ou não, para prosseguir ou não com a ação
     public static boolean askForConfirmation(Component root, String text) {
         return JOptionPane.showConfirmDialog(root, text, "Confirmação", JOptionPane.YES_NO_OPTION) != 1;
+    }
+    
+    public static String generateId() {
+        return UUID.randomUUID().toString().split("-")[0];
     }
 }

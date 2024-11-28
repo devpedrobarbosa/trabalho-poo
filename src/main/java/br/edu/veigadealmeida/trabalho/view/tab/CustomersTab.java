@@ -259,7 +259,7 @@ public class CustomersTab extends javax.swing.JPanel {
             Util.showError(this, "Nenhum funcionário cadastrado para ser responsável pelo associado.");
             return;
         }
-        new AddCustomerView(partnerManager, employeeManager).setVisible(true);
+        new AddCustomerView(employee, partnerManager, employeeManager).setVisible(true);
     }//GEN-LAST:event_addEmployeeClick
 
     

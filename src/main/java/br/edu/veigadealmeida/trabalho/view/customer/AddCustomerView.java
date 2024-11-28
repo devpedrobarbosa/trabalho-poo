@@ -9,8 +9,10 @@ import br.edu.veigadealmeida.trabalho.manager.EmployeeManager;
 import br.edu.veigadealmeida.trabalho.manager.CustomerManager;
 import br.edu.veigadealmeida.trabalho.model.Employee;
 import br.edu.veigadealmeida.trabalho.model.Customer;
+import br.edu.veigadealmeida.trabalho.model.enums.Department;
 import br.edu.veigadealmeida.trabalho.util.Util;
 import br.edu.veigadealmeida.trabalho.view.AdminAppView;
+import br.edu.veigadealmeida.trabalho.view.EmployeeAppView;
 import javax.swing.DefaultComboBoxModel;
 
 /**
@@ -19,7 +21,8 @@ import javax.swing.DefaultComboBoxModel;
  */
 public class AddCustomerView extends javax.swing.JFrame {
     
-    private final CustomerManager partnerManager;
+    private final Employee employee;
+    private final CustomerManager customerManager;
     private final EmployeeManager employeeManager;
     
     /**
@@ -27,12 +30,13 @@ public class AddCustomerView extends javax.swing.JFrame {
      * @param partnerManager
      * @param employeeManager
      */
-    public AddCustomerView(CustomerManager partnerManager, EmployeeManager employeeManager) {
+    public AddCustomerView(Employee employee, CustomerManager partnerManager, EmployeeManager employeeManager) {
         initComponents();
         setLocationRelativeTo(null);
-        this.partnerManager = partnerManager;
+        this.employee = employee;
+        this.customerManager = partnerManager;
         this.employeeManager = employeeManager;
-        responsibleEmployeeSelector.setModel(new DefaultComboBoxModel<>(employeeManager.getAllTypes().stream().map(Employee::getName).toList().toArray(new String[0])));
+        responsibleEmployeeSelector.setModel(new DefaultComboBoxModel<>(employeeManager.getAllTypes().stream().filter(e -> e.getDepartment().equals(Department.PMO)).map(Employee::getName).toList().toArray(new String[0])));
     }
 
     /**
@@ -293,16 +297,23 @@ public class AddCustomerView extends javax.swing.JFrame {
             return;
         }
         String name = nameField.getText(), document = documentField.getText(), address = addressField.getText(), phone = phoneField.getText(), email = emailField.getText(), representative = representativeField.getText(), login = loginField.getText(), password = passwordField.getText();
+        Customer customer = customerManager.getDatabase().findAll().stream().filter(c -> c.getName().equalsIgnoreCase(name) || c.getDocument().equals(document)).findFirst().orElse(null);
+        if(customer != null) {
+            Util.showError(this, "Cliente já cadastrado.");
+            return;
+        }
         Employee employee = employeeManager.getType(responsibleEmployeeSelector.getItemAt(responsibleEmployeeSelector.getSelectedIndex())); //Recupara o funcionário responsável pelo parceiro
         if(employee == null) { //Se não houver, mostra erro e retorna, pois é necessário um funcionário responsável pelo associado
             Util.showError(this, "Funcionário não encontrado.");
             return;
         }
         //Nesse caso, havia funcionário
-        partnerManager.getAllTypes().add(new Customer(name, document, address, phone, email, representative, employee.getName(), login, password));
-        partnerManager.getDatabase().save(partnerManager.getAllTypes());
+        customerManager.getAllTypes().add(new Customer(name, document, address, phone, email, representative, employee.getName(), login, password));
+        customerManager.getDatabase().save(customerManager.getAllTypes());
         dispose();
-        AdminAppView.requestUpdateVisualization();
+        if(this.employee.getDepartment().equals(Department.DEV))
+                AdminAppView.requestUpdateVisualization();
+        else EmployeeAppView.requestDispose();
     }//GEN-LAST:event_addClick
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -34,6 +34,7 @@ public class EditEmployeeView extends javax.swing.JFrame {
         this.employee = employee;
         nameField.setText(employee.getName());
         documentField.setText(employee.getDocument());
+        documentField.setEnabled(false);
         addressField.setText(employee.getAddress());
         phoneField.setText(employee.getPhone());
         emailField.setText(employee.getEmail());
@@ -273,12 +274,12 @@ public class EditEmployeeView extends javax.swing.JFrame {
 
     private void editClick(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editClick
         // TODO add your handling code here:
-        String validationError = Util.validateFields(nameField, documentField, null, addressField, phoneField, emailField, loginField, passwordField, null);
+        String validationError = Util.validateFields(nameField, null, null, addressField, phoneField, emailField, loginField, passwordField, null);
         if(validationError != null) {
             Util.showError(this, validationError);
             return;
         }
-        String name = nameField.getText(), document = documentField.getText(), address = addressField.getText(), phone = phoneField.getText(), email = emailField.getText(), login = loginField.getText(), password = passwordField.getText();
+        String name = nameField.getText(), address = addressField.getText(), phone = phoneField.getText(), email = emailField.getText(), login = loginField.getText(), password = passwordField.getText();
         Department department = Department.valueOf(departmentSelector.getItemAt(departmentSelector.getSelectedIndex()));
         if(department == null) {
             Util.showError(this, "Departamento não encontrado.");
@@ -286,7 +287,6 @@ public class EditEmployeeView extends javax.swing.JFrame {
         }
         manager.getAllTypes().remove(employee);
         employee.setName(name);
-        employee.setDocument(document);
         employee.setAddress(address);
         employee.setPhone(phone);
         employee.setEmail(email);

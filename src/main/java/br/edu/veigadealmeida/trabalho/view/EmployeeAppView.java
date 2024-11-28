@@ -7,7 +7,7 @@ package br.edu.veigadealmeida.trabalho.view;
 import br.edu.veigadealmeida.trabalho.model.Employee;
 import br.edu.veigadealmeida.trabalho.view.tab.OverviewTab;
 import br.edu.veigadealmeida.trabalho.view.tab.CustomersTab;
-import br.edu.veigadealmeida.trabalho.view.tab.ProfileTab;
+import br.edu.veigadealmeida.trabalho.view.tab.EmployeeProfileTab;
 import br.edu.veigadealmeida.trabalho.view.tab.ProjectsTab;
 import java.awt.Color;
 import java.util.function.Function;
@@ -30,8 +30,8 @@ public class EmployeeAppView extends javax.swing.JFrame {
     public enum Pages {
         OVERVIEW(o -> new OverviewTab()),
         PARTNERS(o -> new CustomersTab((Employee) o)),
-        PROJECTS(o -> new ProjectsTab()),
-        PROFILE(o -> new ProfileTab((Employee) o));
+        PROJECTS(o -> new ProjectsTab((Employee) o)),
+        PROFILE(o -> new EmployeeProfileTab((Employee) o));
         
         final Function<Object, JPanel> makePanel;
         

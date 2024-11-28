@@ -4,6 +4,11 @@
  */
 package br.edu.veigadealmeida.trabalho.view.project;
 
+import br.edu.veigadealmeida.trabalho.manager.EmployeeManager;
+import br.edu.veigadealmeida.trabalho.manager.ProjectManager;
+import br.edu.veigadealmeida.trabalho.model.Customer;
+import br.edu.veigadealmeida.trabalho.model.Employee;
+import br.edu.veigadealmeida.trabalho.model.Model;
 import br.edu.veigadealmeida.trabalho.model.Project;
 
 /**
@@ -15,6 +20,12 @@ public class ProjectPanel extends javax.swing.JPanel {
     /**
      * Creates new form ProjectPanel
      */
+    
+    private Model model;
+    private Project project;
+    private ProjectManager projectManager;
+    private EmployeeManager employeeManager;
+    
     /**
      * Essa classe representa um Componente, que é um pedaço de tela que pode ser preenchido com
      * dados de um determinado objeto fornecido, nesse caso, trata-se de um retângulo avulso que
@@ -22,12 +33,20 @@ public class ProjectPanel extends javax.swing.JPanel {
      * @param project
      * recebido no construtor da classe
      */
-    public ProjectPanel(Project project) {
+    public ProjectPanel(Model model, Project project, ProjectManager projectManager, EmployeeManager employeeManager) {
         initComponents();
+        if(!(model instanceof Employee) && !(model instanceof Customer)) return;
+        this.model = model;
+        this.project = project;
+        this.projectManager = projectManager;
+        this.employeeManager = employeeManager;
         this.name.setText(project.getName());
         this.description.setText(project.getDescription());
         this.partner.setText(project.getPartner());
         this.responsibleEmployee.setText(project.getResponsibleEmployee());
+        this.status.setText(project.getStatus().getDisplayName());
+        if(!(model instanceof Employee))
+            details.setEnabled(false);
     }
 
     /**
@@ -49,26 +68,29 @@ public class ProjectPanel extends javax.swing.JPanel {
         details = new javax.swing.JButton();
         scrollPane = new javax.swing.JScrollPane();
         description = new javax.swing.JTextPane();
+        jLabel1 = new javax.swing.JLabel();
 
         setMinimumSize(new java.awt.Dimension(835, 125));
         setPreferredSize(new java.awt.Dimension(835, 125));
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         name.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        name.setText("Project Name");
+        name.setText("Projeto");
         add(name, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 10, -1, -1));
 
         partnerLabel.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        partnerLabel.setText("Partner");
+        partnerLabel.setText("Cliente");
         add(partnerLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 20, -1, -1));
 
+        partner.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
         partner.setText("Partner name");
         add(partner, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 40, -1, -1));
 
         responsibleEmployeeLabel.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        responsibleEmployeeLabel.setText("Responsible Employee");
+        responsibleEmployeeLabel.setText("Funcionário Alocado");
         add(responsibleEmployeeLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 60, -1, -1));
 
+        responsibleEmployee.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
         responsibleEmployee.setText("Responsible employee name");
         add(responsibleEmployee, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 80, -1, -1));
 
@@ -76,23 +98,38 @@ public class ProjectPanel extends javax.swing.JPanel {
         statusLabel.setText("Status");
         add(statusLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 20, -1, -1));
 
+        status.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
         status.setText("Project status");
         add(status, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 40, -1, -1));
 
         details.setText("Detalhes");
+        details.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                detailsActionPerformed(evt);
+            }
+        });
         add(details, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 50, -1, -1));
 
         description.setEditable(false);
         description.setText("Project description");
         scrollPane.setViewportView(description);
 
-        add(scrollPane, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 40, 280, 60));
+        add(scrollPane, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 50, 280, 60));
+
+        jLabel1.setText("Descrição:");
+        add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 30, -1, -1));
     }// </editor-fold>//GEN-END:initComponents
+
+    private void detailsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_detailsActionPerformed
+        // TODO add your handling code here:
+        new ProjectOverview((Employee) model, project, projectManager, employeeManager).setVisible(true);
+    }//GEN-LAST:event_detailsActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextPane description;
     private javax.swing.JButton details;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel name;
     private javax.swing.JLabel partner;
     private javax.swing.JLabel partnerLabel;

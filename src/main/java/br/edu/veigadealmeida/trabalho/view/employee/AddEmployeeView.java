@@ -270,6 +270,11 @@ public class AddEmployeeView extends javax.swing.JFrame {
         }
         //Nesse caso, não houve erro
         String name = nameField.getText(), document = documentField.getText(), address = addressField.getText(), phone = phoneField.getText(), email = emailField.getText(), login = loginField.getText(), password = passwordField.getText(); //Então, recupera todos os campos digitados
+        Employee employee = manager.getDatabase().findAll().stream().filter(e -> e.getName().equalsIgnoreCase(name) || e.getDocument().equals(document)).findFirst().orElse(null);
+        if(employee != null) {
+            Util.showError(this, "Funcionário já cadastrado.");
+            return;
+        }
         Department department = Department.fromDisplayName(departmentSelector.getItemAt(departmentSelector.getSelectedIndex())); //E o Departamento, que vem de uma Enum
         if(department == null) { //Nesse caso, departamento não encontrado
             Util.showError(this, "Departamento não encontrado."); //Então, mostrar erro

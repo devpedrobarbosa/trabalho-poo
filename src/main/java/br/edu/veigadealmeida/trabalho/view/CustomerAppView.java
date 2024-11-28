@@ -6,10 +6,11 @@ package br.edu.veigadealmeida.trabalho.view;
 
 import br.edu.veigadealmeida.trabalho.model.Customer;
 import br.edu.veigadealmeida.trabalho.model.Employee;
+import br.edu.veigadealmeida.trabalho.view.tab.CustomerProfileTab;
 import br.edu.veigadealmeida.trabalho.view.tab.EmployeesTab;
 import br.edu.veigadealmeida.trabalho.view.tab.OverviewTab;
 import br.edu.veigadealmeida.trabalho.view.tab.CustomersTab;
-import br.edu.veigadealmeida.trabalho.view.tab.ProfileTab;
+import br.edu.veigadealmeida.trabalho.view.tab.EmployeeProfileTab;
 import br.edu.veigadealmeida.trabalho.view.tab.ProjectsTab;
 import java.awt.Color;
 import java.util.function.Function;
@@ -31,10 +32,8 @@ public class CustomerAppView extends javax.swing.JFrame {
     */
     public enum Pages {
         OVERVIEW(o -> new OverviewTab()),
-        EMPLOYEES(o -> new EmployeesTab((Employee) o)),
-        PARTNERS(o -> new CustomersTab((Employee) o)),
-        PROJECTS(o -> new ProjectsTab()),
-        PROFILE(o -> new ProfileTab((Employee) o));
+        PROJECTS(o -> new ProjectsTab((Customer) o)),
+        PROFILE(o -> new CustomerProfileTab((Customer) o));
         
         final Function<Object, JPanel> makePanel;
         
@@ -304,6 +303,7 @@ public class CustomerAppView extends javax.swing.JFrame {
     solicitada, definindo-a como conteúdo do openedPanel.
     */
     private void handleSwitch(Pages page, Object o, JButton button) {
+        if(o == null) o = customer;
         if(openedPanel != null) {
             openedPanel.setVisible(false);
             remove(openedPanel);

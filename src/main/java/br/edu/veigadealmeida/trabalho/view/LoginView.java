@@ -123,6 +123,7 @@ public class LoginView extends javax.swing.JFrame {
         if(true) {
             dispose();
             new AdminAppView(new Employee("Admin", null, null, null, null, "admin", "admin", Department.ADMIN)).setVisible(true);
+            return;
         }
         String login = loginField.getText(), password = new String(passwordField.getPassword()); //Conseguindo os valores informados pelo usuário através dos campos
         Employee employee = employeeDatabase.findByLoginAndPassword(login, password); //Buscar funcionário no banco que tenha login e senha equivalentes aos fornecidos
