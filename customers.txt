@@ -1,1 +1,1 @@
-Empresa|00.000.000/0001-00|Rua da Empresa|+55 (21) 9 9123-1233|cliente@empresa.com|Representante|Pedro|cliente|cliente@1
+Empresa|00.000.000/0001-00|Rua da Empresa|+55 (21) 9 9123-1233|cliente@empresa.com|Representante|Pedro|Cliente|Cliente@1

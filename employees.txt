@@ -1,5 +1,4 @@
-Joao|123.123.123-12|asdasdasd|+55 (12) 9 9121-2331|joao@gmail.com|joaozin|Joaozin@1|DEV
-Carlao|123.123.123-12|asdasdasd|+55 (21) 9 9231-2312|carlao@gmail.com|carlaum|Carlao@1|DEV
-Pedro|123.123.123-12|asdasdasd|+55 (12) 9 9121-2332|pedro@gmail.com|pedrao|Pedrao@1|SUPPORT
-Pedro|123.123.123-12|asdas|+55 (12) 9 9231-3123|asdasd@gmail.com|pedrao.top|asdasdasd1@|PMO
-Tiago|123.123.123-12|rua do tiagao|+55 (21) 9 5543-3213|tiago@gmail.com|tiagao|Tiagao123@|ADMIN
+Developer|123.123.123-12|asdasdasd|+55 (21) 9 9231-2312|carlao@gmail.com|Developer|Developer@1|DEV
+Support|123.123.123-12|asdasdasd|+55 (12) 9 9121-2332|pedro@gmail.com|Support|Support@1|SUPPORT
+PMO|123.123.123-12|asdas|+55 (12) 9 9231-3123|asdasd@gmail.com|PMO_User|PMO_User@1|PMO
+Admin|123.123.123-12|rua do tiagao|+55 (21) 9 5543-3213|tiago@gmail.com|Administrador|Administrador@1|ADMIN
