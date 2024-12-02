@@ -24,6 +24,10 @@ public class CustomerProfileTab extends javax.swing.JPanel {
         initComponents();
         name.setText(customer.getName());
         email.setText(customer.getEmail());
+        phone.setText(customer.getPhone());
+        address.setText(customer.getAddress());
+        representative.setText(customer.getRepresentative());
+        responsibleEmployee.setText(customer.getResponsibleEmployee());
     }
 
     /**
@@ -41,10 +45,20 @@ public class CustomerProfileTab extends javax.swing.JPanel {
         email = new javax.swing.JLabel();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel2 = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTable2 = new javax.swing.JTable();
         logout = new javax.swing.JButton();
+        phoneLabel = new javax.swing.JLabel();
+        phone = new javax.swing.JLabel();
+        emailLabel2 = new javax.swing.JLabel();
+        address = new javax.swing.JLabel();
+        emailLabel3 = new javax.swing.JLabel();
+        representative = new javax.swing.JLabel();
+        emailLabel4 = new javax.swing.JLabel();
+        responsibleEmployee = new javax.swing.JLabel();
 
         name.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        name.setText("Employee name");
+        name.setText("Customer's name");
 
         profilePicture.setBackground(new java.awt.Color(51, 51, 51));
 
@@ -63,17 +77,45 @@ public class CustomerProfileTab extends javax.swing.JPanel {
         emailLabel.setText("E-Mail");
 
         email.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        email.setText("Employee email.");
+        email.setText("Customer's email.");
+
+        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Nome", "Responsável", "Prazo", "Status"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane2.setViewportView(jTable2);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 700, Short.MAX_VALUE)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 700, Short.MAX_VALUE)
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 448, Short.MAX_VALUE)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 448, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Seus projetos", jPanel2);
@@ -84,6 +126,30 @@ public class CustomerProfileTab extends javax.swing.JPanel {
                 onLogoutClick(evt);
             }
         });
+
+        phoneLabel.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        phoneLabel.setText("Telefone");
+
+        phone.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        phone.setText("Customer's phone.");
+
+        emailLabel2.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        emailLabel2.setText("Endereço");
+
+        address.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        address.setText("Customer's address.");
+
+        emailLabel3.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        emailLabel3.setText("Representante");
+
+        representative.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        representative.setText("Customer's representative.");
+
+        emailLabel4.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        emailLabel4.setText("Responsável");
+
+        responsibleEmployee.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        responsibleEmployee.setText("Customer's responsible employee.");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -98,16 +164,23 @@ public class CustomerProfileTab extends javax.swing.JPanel {
                                 .addComponent(logout, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(7, 7, 7)
-                                .addComponent(profilePicture, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 63, Short.MAX_VALUE))
+                                .addComponent(profilePicture, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(name)
                             .addComponent(email)
-                            .addComponent(emailLabel))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 62, Short.MAX_VALUE)))
+                            .addComponent(emailLabel)
+                            .addComponent(phone)
+                            .addComponent(phoneLabel)
+                            .addComponent(address)
+                            .addComponent(emailLabel2)
+                            .addComponent(representative)
+                            .addComponent(emailLabel3)
+                            .addComponent(responsibleEmployee)
+                            .addComponent(emailLabel4))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 700, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -120,10 +193,26 @@ public class CustomerProfileTab extends javax.swing.JPanel {
                         .addComponent(profilePicture, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(name)
-                        .addGap(18, 18, 18)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(emailLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(email)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(phoneLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(phone)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(emailLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(address)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(emailLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(representative)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(emailLabel4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(responsibleEmployee)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(logout))
                     .addComponent(jTabbedPane1))
@@ -140,12 +229,22 @@ public class CustomerProfileTab extends javax.swing.JPanel {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel address;
     private javax.swing.JLabel email;
     private javax.swing.JLabel emailLabel;
+    private javax.swing.JLabel emailLabel2;
+    private javax.swing.JLabel emailLabel3;
+    private javax.swing.JLabel emailLabel4;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JTable jTable2;
     private javax.swing.JButton logout;
     private javax.swing.JLabel name;
+    private javax.swing.JLabel phone;
+    private javax.swing.JLabel phoneLabel;
     private javax.swing.JPanel profilePicture;
+    private javax.swing.JLabel representative;
+    private javax.swing.JLabel responsibleEmployee;
     // End of variables declaration//GEN-END:variables
 }

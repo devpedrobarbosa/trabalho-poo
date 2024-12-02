@@ -1,7 +1,8 @@
 br\edu\veigadealmeida\trabalho\view\AboutApp.class
 br\edu\veigadealmeida\trabalho\view\AdminAppView.class
 br\edu\veigadealmeida\trabalho\view\tab\EmployeesTab$1.class
-br\edu\veigadealmeida\trabalho\view\EmployeeAppView$11.class
+br\edu\veigadealmeida\trabalho\view\task\DeleteTaskView.class
+br\edu\veigadealmeida\trabalho\view\project\ProjectOverview$6.class
 br\edu\veigadealmeida\trabalho\view\AdminAppView$1.class
 br\edu\veigadealmeida\trabalho\view\EmployeeAppView$9.class
 br\edu\veigadealmeida\trabalho\view\LoginView.class
@@ -19,6 +20,7 @@ br\edu\veigadealmeida\trabalho\view\tab\ProjectsTab$4.class
 br\edu\veigadealmeida\trabalho\view\AdminAppView$7.class
 br\edu\veigadealmeida\trabalho\model\Customer.class
 br\edu\veigadealmeida\trabalho\view\tab\EmployeesTab$4.class
+br\edu\veigadealmeida\trabalho\view\tab\EmployeeProfileTab$3.class
 br\edu\veigadealmeida\trabalho\view\CustomerAppView$4.class
 br\edu\veigadealmeida\trabalho\view\employee\AddEmployeeView$2.class
 br\edu\veigadealmeida\trabalho\view\project\ProjectPanel$1.class
@@ -29,7 +31,8 @@ br\edu\veigadealmeida\trabalho\view\tab\OverviewTab.class
 br\edu\veigadealmeida\trabalho\view\tab\ProjectsTab.class
 br\edu\veigadealmeida\trabalho\database\TaskDatabase.class
 br\edu\veigadealmeida\trabalho\Main$Func2.class
-br\edu\veigadealmeida\trabalho\view\AdminAppView$14.class
+br\edu\veigadealmeida\trabalho\view\task\AddTaskView$1.class
+br\edu\veigadealmeida\trabalho\view\task\EditTaskView$2.class
 br\edu\veigadealmeida\trabalho\view\CustomerAppView$5.class
 br\edu\veigadealmeida\trabalho\view\AdminAppView$Pages.class
 br\edu\veigadealmeida\trabalho\view\EmployeeAppView$4.class
@@ -41,6 +44,7 @@ br\edu\veigadealmeida\trabalho\view\customer\DeleteCustomerView.class
 br\edu\veigadealmeida\trabalho\view\AdminAppView$2.class
 br\edu\veigadealmeida\trabalho\view\tab\CustomersTab$5.class
 br\edu\veigadealmeida\trabalho\model\Employee.class
+br\edu\veigadealmeida\trabalho\view\project\ProjectOverview$5.class
 br\edu\veigadealmeida\trabalho\view\CustomerAppView$Pages.class
 br\edu\veigadealmeida\trabalho\view\employee\AddEmployeeView.class
 br\edu\veigadealmeida\trabalho\view\employee\EditEmployeeView$1.class
@@ -55,9 +59,9 @@ br\edu\veigadealmeida\trabalho\view\AdminAppView$3.class
 br\edu\veigadealmeida\trabalho\view\tab\CustomersTab$4.class
 br\edu\veigadealmeida\trabalho\model\enums\Department.class
 br\edu\veigadealmeida\trabalho\view\project\ProjectOverview$4.class
-br\edu\veigadealmeida\trabalho\view\AdminAppView$13.class
 br\edu\veigadealmeida\trabalho\view\employee\AddEmployeeView$1.class
 br\edu\veigadealmeida\trabalho\manager\Manager.class
+br\edu\veigadealmeida\trabalho\view\task\AddTaskView$2.class
 br\edu\veigadealmeida\trabalho\view\CustomerAppView$3.class
 br\edu\veigadealmeida\trabalho\view\tab\CustomersTab$6.class
 br\edu\veigadealmeida\trabalho\view\project\ProjectOverview$2.class
@@ -69,7 +73,8 @@ br\edu\veigadealmeida\trabalho\manager\CustomerManager.class
 br\edu\veigadealmeida\trabalho\view\CustomerAppView.class
 br\edu\veigadealmeida\trabalho\view\tab\CustomersTab.class
 br\edu\veigadealmeida\trabalho\view\EmployeeAppView$Pages.class
-br\edu\veigadealmeida\trabalho\view\EmployeeAppView$12.class
+br\edu\veigadealmeida\trabalho\view\task\EditTaskView.class
+br\edu\veigadealmeida\trabalho\view\task\EditTaskView$1.class
 br\edu\veigadealmeida\trabalho\database\CustomerDatabase.class
 br\edu\veigadealmeida\trabalho\view\AdminAppView$5.class
 br\edu\veigadealmeida\trabalho\view\employee\EditEmployeeView$2.class
@@ -80,7 +85,7 @@ br\edu\veigadealmeida\trabalho\manager\ProjectManager.class
 br\edu\veigadealmeida\trabalho\view\tab\EmployeesTab$3.class
 br\edu\veigadealmeida\trabalho\view\tab\EmployeesTab.class
 br\edu\veigadealmeida\trabalho\view\tab\CustomerProfileTab.class
-br\edu\veigadealmeida\trabalho\view\CustomerAppView$10.class
+br\edu\veigadealmeida\trabalho\view\task\AddTaskView.class
 br\edu\veigadealmeida\trabalho\view\EmployeeAppView$7.class
 br\edu\veigadealmeida\trabalho\view\customer\EditCustomerView$1.class
 br\edu\veigadealmeida\trabalho\view\AdminAppView$6.class
@@ -103,12 +108,13 @@ br\edu\veigadealmeida\trabalho\model\Task.class
 br\edu\veigadealmeida\trabalho\database\Database.class
 br\edu\veigadealmeida\trabalho\database\ProjectDatabase.class
 br\edu\veigadealmeida\trabalho\view\AboutApp$2.class
-br\edu\veigadealmeida\trabalho\view\CustomerAppView$9.class
 br\edu\veigadealmeida\trabalho\view\LoginView$2.class
 br\edu\veigadealmeida\trabalho\view\project\ProjectOverview.class
+br\edu\veigadealmeida\trabalho\view\tab\CustomerProfileTab$2.class
 br\edu\veigadealmeida\trabalho\view\EmployeeAppView$10.class
 br\edu\veigadealmeida\trabalho\Main.class
 br\edu\veigadealmeida\trabalho\view\customer\AddCustomerView$1.class
+br\edu\veigadealmeida\trabalho\view\project\ProjectOverview$7.class
 br\edu\veigadealmeida\trabalho\view\project\AddProjectView.class
 br\edu\veigadealmeida\trabalho\view\CustomerAppView$2.class
 br\edu\veigadealmeida\trabalho\view\employee\DeleteEmployeeView.class
@@ -117,5 +123,7 @@ br\edu\veigadealmeida\trabalho\view\tab\EmployeesTab$5.class
 br\edu\veigadealmeida\trabalho\view\employee\EditEmployeeView.class
 br\edu\veigadealmeida\trabalho\view\project\ProjectOverview$1.class
 br\edu\veigadealmeida\trabalho\view\EmployeeAppView.class
+br\edu\veigadealmeida\trabalho\view\tab\EmployeeProfileTab$2.class
+br\edu\veigadealmeida\trabalho\view\task\DeleteTaskView$1.class
 br\edu\veigadealmeida\trabalho\database\EmployeeDatabase.class
 br\edu\veigadealmeida\trabalho\view\EmployeeAppView$2.class
