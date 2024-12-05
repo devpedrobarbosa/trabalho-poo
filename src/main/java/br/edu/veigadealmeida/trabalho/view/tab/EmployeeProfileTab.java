@@ -4,10 +4,20 @@
  */
 package br.edu.veigadealmeida.trabalho.view.tab;
 
+import br.edu.veigadealmeida.trabalho.database.CustomerDatabase;
+import br.edu.veigadealmeida.trabalho.database.TaskDatabase;
+import br.edu.veigadealmeida.trabalho.manager.CustomerManager;
+import br.edu.veigadealmeida.trabalho.manager.TaskManager;
 import br.edu.veigadealmeida.trabalho.model.Employee;
+import br.edu.veigadealmeida.trabalho.model.enums.Department;
 import br.edu.veigadealmeida.trabalho.util.Util;
 import br.edu.veigadealmeida.trabalho.view.AdminAppView;
+import br.edu.veigadealmeida.trabalho.view.PMPAppView;
 import br.edu.veigadealmeida.trabalho.view.LoginView;
+import java.util.Enumeration;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 
 /**
  *
@@ -15,16 +25,33 @@ import br.edu.veigadealmeida.trabalho.view.LoginView;
  */
 public class EmployeeProfileTab extends javax.swing.JPanel {
     
+    private static CustomerManager customerManager = new CustomerManager(new CustomerDatabase());
+    private static TaskManager taskManager = new TaskManager(new TaskDatabase());
+    
+    private final Employee employee;
+    
     /**
      * Creates new form ProfileTab
      */
     public EmployeeProfileTab(Employee employee) {
         initComponents();
+        this.employee = employee;
         name.setText(employee.getName());
         department.setText(employee.getDepartment().getDisplayName());
         email.setText(employee.getEmail());
         phone.setText(employee.getPhone());
         address.setText(employee.getAddress());
+        customersTable.setModel(new DefaultTableModel(customerManager.toDataArray(customerManager.getAllTypes().stream().filter(customer -> customer.getResponsibleEmployee().equalsIgnoreCase(employee.getName())).toList()), new String[]{"Nome", "Representante", "Telefone", "E-Mail"}));
+        tasksTable.setModel(new DefaultTableModel(taskManager.toDataArray(taskManager.getAllTypes().stream().filter(task -> task.getResponsibleEmployee().equalsIgnoreCase(employee.getName())).toList()), new String[]{"ID", "Nome", "Projeto", "Status"}));
+        fixColumnWidth();
+    }
+    
+    private void fixColumnWidth() {
+        for(JTable table : new JTable[]{customersTable, tasksTable}) {
+            Enumeration<TableColumn> tableColumns = table.getColumnModel().getColumns();
+            while(tableColumns.hasMoreElements()) //Para cada coluna
+                tableColumns.nextElement().setMinWidth(200); //Define largura de 150
+        }
     }
 
     /**
@@ -44,11 +71,11 @@ public class EmployeeProfileTab extends javax.swing.JPanel {
         email = new javax.swing.JLabel();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        scrollPane = new javax.swing.JScrollPane();
+        customersTable = new javax.swing.JTable();
         jPanel2 = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        scrollPane1 = new javax.swing.JScrollPane();
+        tasksTable = new javax.swing.JTable();
         logout = new javax.swing.JButton();
         phoneLabel = new javax.swing.JLabel();
         phone = new javax.swing.JLabel();
@@ -83,84 +110,110 @@ public class EmployeeProfileTab extends javax.swing.JPanel {
         email.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         email.setText("Employee's email.");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        scrollPane.setPreferredSize(new java.awt.Dimension(700, 457));
+
+        customersTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null}
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {}
             },
             new String [] {
-                "Nome", "Telefone"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class
-            };
-            boolean[] canEdit = new boolean [] {
-                false, false
-            };
 
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
             }
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        jScrollPane2.setViewportView(jTable1);
+        ));
+        customersTable.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
+        scrollPane.setViewportView(customersTable);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 700, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(scrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 457, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(scrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Seus clientes", jPanel1);
 
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        scrollPane1.setPreferredSize(new java.awt.Dimension(700, 457));
+
+        tasksTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {}
             },
             new String [] {
-                "ID", "Nome", "Projeto", "Prazo"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
-            };
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false
-            };
 
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
             }
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        jScrollPane1.setViewportView(jTable2);
+        ));
+        tasksTable.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
+        scrollPane1.setViewportView(tasksTable);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 700, Short.MAX_VALUE)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addComponent(scrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 457, Short.MAX_VALUE)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addComponent(scrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Suas tarefas", jPanel2);
@@ -196,14 +249,11 @@ public class EmployeeProfileTab extends javax.swing.JPanel {
                                 .addContainerGap()
                                 .addComponent(logout, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(7, 7, 7)
-                                        .addComponent(profilePicture, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addContainerGap()
-                                        .addComponent(name)))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                .addGap(7, 7, 7)
+                                .addComponent(profilePicture, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(name)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 62, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
@@ -256,7 +306,7 @@ public class EmployeeProfileTab extends javax.swing.JPanel {
     private void onLogoutClick(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onLogoutClick
         // TODO add your handling code here:
         if(!Util.askForConfirmation(this, "Quer mesmo sair?")) return;
-        AdminAppView.requestDispose();
+        Util.requestEmployeeDispose();
         new LoginView().setVisible(true);
     }//GEN-LAST:event_onLogoutClick
 
@@ -264,21 +314,21 @@ public class EmployeeProfileTab extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel address;
     private javax.swing.JLabel addressLabel;
+    private javax.swing.JTable customersTable;
     private javax.swing.JLabel department;
     private javax.swing.JLabel departmentLabel;
     private javax.swing.JLabel email;
     private javax.swing.JLabel emailLabel;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTable jTable2;
     private javax.swing.JButton logout;
     private javax.swing.JLabel name;
     private javax.swing.JLabel phone;
     private javax.swing.JLabel phoneLabel;
     private javax.swing.JPanel profilePicture;
+    private javax.swing.JScrollPane scrollPane;
+    private javax.swing.JScrollPane scrollPane1;
+    private javax.swing.JTable tasksTable;
     // End of variables declaration//GEN-END:variables
 }

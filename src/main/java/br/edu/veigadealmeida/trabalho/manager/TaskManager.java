@@ -37,6 +37,21 @@ public class TaskManager extends Manager<String, Task> {
             data[i][3] = task.getResponsibleEmployee();
             data[i][4] = task.getStart() == null ? "Não definido" : writeFormat.format(task.getStart());
             data[i][5] = task.getEndTerm() == null ? "Não definido" : writeFormat.format(task.getEndTerm());
+            data[i][6] = task.getStatus().getDisplayName();
+        }
+        return data;
+    }
+    
+    public String[][] toResumedDataArray(List<Task> list) {
+        String[][] data = new String[list.size()][4];
+        for(int i = 0; i < list.size(); i++) {
+            Task task = list.get(i);
+            if(task == null)
+                continue;
+            data[i][0] = task.getId();
+            data[i][1] = task.getName();
+            data[i][2] = task.getProject();
+            data[i][3] = task.getStatus().getDisplayName();
         }
         return data;
     }

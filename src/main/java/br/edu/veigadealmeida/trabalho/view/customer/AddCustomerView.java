@@ -12,7 +12,7 @@ import br.edu.veigadealmeida.trabalho.model.Customer;
 import br.edu.veigadealmeida.trabalho.model.enums.Department;
 import br.edu.veigadealmeida.trabalho.util.Util;
 import br.edu.veigadealmeida.trabalho.view.AdminAppView;
-import br.edu.veigadealmeida.trabalho.view.EmployeeAppView;
+import br.edu.veigadealmeida.trabalho.view.PMPAppView;
 import javax.swing.DefaultComboBoxModel;
 
 /**
@@ -313,7 +313,7 @@ public class AddCustomerView extends javax.swing.JFrame {
         dispose();
         if(this.employee.getDepartment().equals(Department.DEV))
                 AdminAppView.requestUpdateVisualization();
-        else EmployeeAppView.requestDispose();
+        else PMPAppView.requestDispose();
     }//GEN-LAST:event_addClick
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

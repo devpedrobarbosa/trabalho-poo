@@ -140,6 +140,7 @@ public class LoginView extends javax.swing.JFrame {
         if(customer != null) new CustomerAppView(customer).setVisible(true);
         else if(employee.getDepartment().equals(Department.ADMIN))
             new AdminAppView(employee).setVisible(true); //Abrir tela principal passando o funcionário que logou
+        else if(employee.getDepartment().equals(Department.PMO)) new PMPAppView(employee).setVisible(true);
         else new EmployeeAppView(employee).setVisible(true);
     }//GEN-LAST:event_onLoginClick
 

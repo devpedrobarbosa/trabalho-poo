@@ -45,8 +45,8 @@ public class CustomerProfileTab extends javax.swing.JPanel {
         email = new javax.swing.JLabel();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel2 = new javax.swing.JPanel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        scrollPane1 = new javax.swing.JScrollPane();
+        table = new javax.swing.JTable();
         logout = new javax.swing.JButton();
         phoneLabel = new javax.swing.JLabel();
         phone = new javax.swing.JLabel();
@@ -79,43 +79,56 @@ public class CustomerProfileTab extends javax.swing.JPanel {
         email.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         email.setText("Customer's email.");
 
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        scrollPane1.setPreferredSize(new java.awt.Dimension(700, 457));
+
+        table.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {}
             },
             new String [] {
-                "Nome", "Responsável", "Prazo", "Status"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
-            };
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false
-            };
 
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
             }
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        jScrollPane2.setViewportView(jTable2);
+        ));
+        table.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
+        scrollPane1.setViewportView(table);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 700, Short.MAX_VALUE)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addComponent(scrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 448, Short.MAX_VALUE)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addComponent(scrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Seus projetos", jPanel2);
@@ -236,9 +249,7 @@ public class CustomerProfileTab extends javax.swing.JPanel {
     private javax.swing.JLabel emailLabel3;
     private javax.swing.JLabel emailLabel4;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTable jTable2;
     private javax.swing.JButton logout;
     private javax.swing.JLabel name;
     private javax.swing.JLabel phone;
@@ -246,5 +257,7 @@ public class CustomerProfileTab extends javax.swing.JPanel {
     private javax.swing.JPanel profilePicture;
     private javax.swing.JLabel representative;
     private javax.swing.JLabel responsibleEmployee;
+    private javax.swing.JScrollPane scrollPane1;
+    private javax.swing.JTable table;
     // End of variables declaration//GEN-END:variables
 }

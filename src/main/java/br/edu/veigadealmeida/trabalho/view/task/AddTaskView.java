@@ -14,10 +14,10 @@ import br.edu.veigadealmeida.trabalho.model.Customer;
 import br.edu.veigadealmeida.trabalho.model.Project;
 import br.edu.veigadealmeida.trabalho.model.Task;
 import br.edu.veigadealmeida.trabalho.model.enums.Department;
-import br.edu.veigadealmeida.trabalho.model.enums.ProjectStatus;
+import br.edu.veigadealmeida.trabalho.model.enums.Status;
 import br.edu.veigadealmeida.trabalho.util.Util;
 import br.edu.veigadealmeida.trabalho.view.AdminAppView;
-import br.edu.veigadealmeida.trabalho.view.EmployeeAppView;
+import br.edu.veigadealmeida.trabalho.view.PMPAppView;
 import br.edu.veigadealmeida.trabalho.view.project.ProjectOverview;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -54,7 +54,7 @@ public class AddTaskView extends javax.swing.JFrame {
         this.employeeManager = employeeManager;
         this.overview = overview;
         this.taskManager = taskManager;
-        responsibleEmployeeSelector.setModel(new DefaultComboBoxModel<>(employeeManager.getAllTypes().stream().filter(e -> e.getDepartment().equals(Department.PMO)).map(Employee::getName).toList().toArray(new String[0])));
+        responsibleEmployeeSelector.setModel(new DefaultComboBoxModel<>(employeeManager.getAllTypes().stream().filter(e -> e.getDepartment().ordinal() < Department.DEV.ordinal()).map(Employee::getName).toList().toArray(new String[0])));
         projectSelector.setModel(new DefaultComboBoxModel<>(projectManager.getAllTypes().stream().map(Project::getName).toList().toArray(new String[0])));
     }
 

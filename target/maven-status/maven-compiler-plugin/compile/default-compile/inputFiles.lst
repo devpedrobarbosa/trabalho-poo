@@ -13,7 +13,7 @@ C:\Users\Pedro\Documents\Faculdade\2024.POO\Trabalho-POO\src\main\java\br\edu\ve
 C:\Users\Pedro\Documents\Faculdade\2024.POO\Trabalho-POO\src\main\java\br\edu\veigadealmeida\trabalho\model\Customer.java
 C:\Users\Pedro\Documents\Faculdade\2024.POO\Trabalho-POO\src\main\java\br\edu\veigadealmeida\trabalho\model\Employee.java
 C:\Users\Pedro\Documents\Faculdade\2024.POO\Trabalho-POO\src\main\java\br\edu\veigadealmeida\trabalho\model\enums\Department.java
-C:\Users\Pedro\Documents\Faculdade\2024.POO\Trabalho-POO\src\main\java\br\edu\veigadealmeida\trabalho\model\enums\ProjectStatus.java
+C:\Users\Pedro\Documents\Faculdade\2024.POO\Trabalho-POO\src\main\java\br\edu\veigadealmeida\trabalho\model\enums\Status.java
 C:\Users\Pedro\Documents\Faculdade\2024.POO\Trabalho-POO\src\main\java\br\edu\veigadealmeida\trabalho\model\Model.java
 C:\Users\Pedro\Documents\Faculdade\2024.POO\Trabalho-POO\src\main\java\br\edu\veigadealmeida\trabalho\model\Project.java
 C:\Users\Pedro\Documents\Faculdade\2024.POO\Trabalho-POO\src\main\java\br\edu\veigadealmeida\trabalho\model\Task.java
@@ -29,7 +29,9 @@ C:\Users\Pedro\Documents\Faculdade\2024.POO\Trabalho-POO\src\main\java\br\edu\ve
 C:\Users\Pedro\Documents\Faculdade\2024.POO\Trabalho-POO\src\main\java\br\edu\veigadealmeida\trabalho\view\employee\EditEmployeeView.java
 C:\Users\Pedro\Documents\Faculdade\2024.POO\Trabalho-POO\src\main\java\br\edu\veigadealmeida\trabalho\view\EmployeeAppView.java
 C:\Users\Pedro\Documents\Faculdade\2024.POO\Trabalho-POO\src\main\java\br\edu\veigadealmeida\trabalho\view\LoginView.java
+C:\Users\Pedro\Documents\Faculdade\2024.POO\Trabalho-POO\src\main\java\br\edu\veigadealmeida\trabalho\view\PMPAppView.java
 C:\Users\Pedro\Documents\Faculdade\2024.POO\Trabalho-POO\src\main\java\br\edu\veigadealmeida\trabalho\view\project\AddProjectView.java
+C:\Users\Pedro\Documents\Faculdade\2024.POO\Trabalho-POO\src\main\java\br\edu\veigadealmeida\trabalho\view\project\DeleteProjectView.java
 C:\Users\Pedro\Documents\Faculdade\2024.POO\Trabalho-POO\src\main\java\br\edu\veigadealmeida\trabalho\view\project\ProjectOverview.java
 C:\Users\Pedro\Documents\Faculdade\2024.POO\Trabalho-POO\src\main\java\br\edu\veigadealmeida\trabalho\view\project\ProjectPanel.java
 C:\Users\Pedro\Documents\Faculdade\2024.POO\Trabalho-POO\src\main\java\br\edu\veigadealmeida\trabalho\view\tab\CustomerProfileTab.java

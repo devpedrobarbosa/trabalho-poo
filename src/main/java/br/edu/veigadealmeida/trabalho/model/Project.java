@@ -4,7 +4,7 @@
  */
 package br.edu.veigadealmeida.trabalho.model;
 
-import br.edu.veigadealmeida.trabalho.model.enums.ProjectStatus;
+import br.edu.veigadealmeida.trabalho.model.enums.Status;
 import java.util.Date;
 
 /**
@@ -15,13 +15,13 @@ public class Project extends Model {
     
     private String description, customer, responsibleEmployee;
     private Date start, endTerm;
-    private ProjectStatus status;
+    private Status status;
     
     public Project(String line) {
         super(line);
     }
     
-    public Project(String name, String description, String partner, String responsibleEmployee, Date start, Date endTerm, ProjectStatus status) {
+    public Project(String name, String description, String partner, String responsibleEmployee, Date start, Date endTerm, Status status) {
         super(name);
         this.description = description;
         this.customer = partner;
@@ -79,11 +79,11 @@ public class Project extends Model {
         this.endTerm = endTerm;
     }
 
-    public ProjectStatus getStatus() {
+    public Status getStatus() {
         return status;
     }
 
-    public void setStatus(ProjectStatus status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
 
@@ -96,7 +96,7 @@ public class Project extends Model {
         final long startTime = Long.parseLong(data[4]), endTermTime = Long.parseLong(data[5]);
         start = startTime < 0 ? null : new Date(startTime);
         endTerm = endTermTime < 0 ? null : new Date(endTermTime);
-        status = ProjectStatus.valueOf(data[6].toUpperCase());
+        status = Status.valueOf(data[6].toUpperCase());
     }
     
     @Override

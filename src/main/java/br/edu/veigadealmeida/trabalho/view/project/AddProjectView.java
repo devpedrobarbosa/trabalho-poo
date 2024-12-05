@@ -13,10 +13,10 @@ import br.edu.veigadealmeida.trabalho.model.Employee;
 import br.edu.veigadealmeida.trabalho.model.Customer;
 import br.edu.veigadealmeida.trabalho.model.Project;
 import br.edu.veigadealmeida.trabalho.model.enums.Department;
-import br.edu.veigadealmeida.trabalho.model.enums.ProjectStatus;
+import br.edu.veigadealmeida.trabalho.model.enums.Status;
 import br.edu.veigadealmeida.trabalho.util.Util;
 import br.edu.veigadealmeida.trabalho.view.AdminAppView;
-import br.edu.veigadealmeida.trabalho.view.EmployeeAppView;
+import br.edu.veigadealmeida.trabalho.view.PMPAppView;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.swing.DefaultComboBoxModel;
@@ -204,13 +204,13 @@ public class AddProjectView extends javax.swing.JFrame {
         }
         try {
             final Date date = endTermField.getText().isEmpty() ? null : new SimpleDateFormat("dd/MM/yyyy").parse(endTermField.getText());
-            final Project p = new Project(name, "", customer.getName(), employee.getName(), new Date(), date, ProjectStatus.CREATED);
+            final Project p = new Project(name, "", customer.getName(), employee.getName(), new Date(), date, Status.CREATED);
             projectManager.getAllTypes().add(p);
             projectManager.getDatabase().save(projectManager.getAllTypes());
             dispose();
             if(this.employee.getDepartment().equals(Department.DEV))
                 AdminAppView.requestUpdateVisualization();
-            else EmployeeAppView.requestDispose();
+            else PMPAppView.requestDispose();
         } catch(Exception e) {
             e.printStackTrace();
         }

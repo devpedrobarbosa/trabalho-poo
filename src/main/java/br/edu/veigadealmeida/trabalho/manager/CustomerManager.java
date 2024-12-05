@@ -36,4 +36,17 @@ public class CustomerManager extends Manager<String, Customer>{
         }
         return data;
     }
+    
+    public String[][] toResumedDataArray(List<Customer> list) {
+        String[][] data = new String[list.size()][4];
+        for(int i = 0; i < list.size(); i++) {
+            Customer partner = list.get(i);
+            if(partner == null) continue;
+            data[i][0] = partner.getName();
+            data[i][1] = partner.getRepresentative();
+            data[i][2] = partner.getPhone();
+            data[i][3] = partner.getEmail();
+        }
+        return data;
+    }
 }

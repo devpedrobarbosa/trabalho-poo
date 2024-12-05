@@ -70,9 +70,9 @@ public class CustomerAppView extends javax.swing.JFrame {
         setResizable(false); //Não permitir que seja redimensionada
         buttonBackgroundColor = new Color(122, 178, 211); //Armazena a cor padrão dos botões para facilitar o desenvolvimento
         darkerButtonBackgroundColor = new Color(112, 168, 201); //Nesse caso, a cor quando o botão está selecionado
+        this.customer = customer; //Recebe o funcionário que logou no sistema
         handleSwitch(Pages.PROJECTS, null, projectsTab); //Realiza a abertura da página padrão
         instance = this; //Recebe a instância atual da classe, para ser acessada estáticamente por outras classes
-        this.customer = customer; //Recebe o funcionário que logou no sistema
     }
 
     /**

@@ -55,7 +55,7 @@ public class EditTaskView extends javax.swing.JFrame {
         this.taskManager = taskManager;
         this.task = task;
         nameField.setText(task.getName());
-        responsibleEmployeeSelector.setModel(new DefaultComboBoxModel<>(employeeManager.getAllTypes().stream().filter(e -> e.getDepartment().equals(Department.PMO)).map(Employee::getName).toList().toArray(new String[0])));
+        responsibleEmployeeSelector.setModel(new DefaultComboBoxModel<>(employeeManager.getAllTypes().stream().filter(e -> e.getDepartment().ordinal() < Department.DEV.ordinal()).map(Employee::getName).toList().toArray(new String[0])));
         responsibleEmployeeSelector.setSelectedItem(task.getResponsibleEmployee());
         projectSelector.setModel(new DefaultComboBoxModel<>(projectManager.getAllTypes().stream().map(Project::getName).toList().toArray(new String[0])));
         projectSelector.setSelectedItem(task.getProject());

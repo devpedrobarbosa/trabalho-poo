@@ -4,6 +4,7 @@
  */
 package br.edu.veigadealmeida.trabalho.model;
 
+import br.edu.veigadealmeida.trabalho.model.enums.Status;
 import br.edu.veigadealmeida.trabalho.util.Util;
 import java.util.Date;
 
@@ -15,6 +16,7 @@ public class Task extends Model {
     
     private String id, project, responsibleEmployee;
     private Date start, endTerm;
+    private Status status;
 
     public Task(String line) {
         super(line);
@@ -69,9 +71,17 @@ public class Task extends Model {
         this.endTerm = endTerm;
     }
 
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
     @Override
     public void fill(String[] data) {
-        if(data.length != 6) return;
+        if(data.length != 7) return;
         id = data[0];
         setName(data[1]);
         project = data[2];
@@ -79,11 +89,12 @@ public class Task extends Model {
         final long startTime = Long.parseLong(data[4]), endTermTime = Long.parseLong(data[5]);
         start = startTime < 0 ? null : new Date(startTime);
         endTerm = endTermTime < 0 ? null : new Date(endTermTime);
+        status = Status.valueOf(data[6].toUpperCase());
     }
 
     @Override
     public String toLine() {
         final long startTime = start == null ? -1 : start.getTime(), endTermTime = endTerm == null ? -1 : endTerm.getTime();
-        return id + "|" + getName() + "|" + project + "|" + responsibleEmployee + "|" + startTime + "|" + endTermTime;
+        return id + "|" + getName() + "|" + project + "|" + responsibleEmployee + "|" + startTime + "|" + endTermTime + "|" + status.name();
     }
 }

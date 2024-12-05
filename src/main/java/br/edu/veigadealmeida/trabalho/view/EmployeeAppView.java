@@ -27,7 +27,6 @@ public class EmployeeAppView extends javax.swing.JFrame {
     * do código
     */
     public enum Pages {
-        PARTNERS(o -> new CustomersTab((Employee) o)),
         PROJECTS(o -> new ProjectsTab((Employee) o)),
         PROFILE(o -> new EmployeeProfileTab((Employee) o));
         
@@ -69,13 +68,13 @@ public class EmployeeAppView extends javax.swing.JFrame {
      */
     public EmployeeAppView(Employee employee) { //Iniciando tela principal
         initComponents(); //Código gerado
+        instance = this; //Recebe a instância atual da classe, para ser acessada estáticamente por outras classes
         setLocationRelativeTo(null); //Centralizar a tela
         setResizable(false); //Não permitir que seja redimensionada
         buttonBackgroundColor = new Color(122, 178, 211); //Armazena a cor padrão dos botões para facilitar o desenvolvimento
         darkerButtonBackgroundColor = new Color(112, 168, 201); //Nesse caso, a cor quando o botão está selecionado
-        handleSwitch(Pages.PROJECTS, null, projectsTab); //Realiza a abertura da página padrão
-        instance = this; //Recebe a instância atual da classe, para ser acessada estáticamente por outras classes
         this.employee = employee; //Recebe o funcionário que logou no sistema
+        handleSwitch(Pages.PROJECTS, null, projectsTab); //Realiza a abertura da página padrão
     }
 
     /**
@@ -89,7 +88,6 @@ public class EmployeeAppView extends javax.swing.JFrame {
 
         jMenuItem1 = new javax.swing.JMenuItem();
         navigation = new javax.swing.JPanel();
-        partnersTab = new javax.swing.JButton();
         projectsTab = new javax.swing.JButton();
         profileTab = new javax.swing.JButton();
         display = new javax.swing.JLayeredPane();
@@ -108,28 +106,6 @@ public class EmployeeAppView extends javax.swing.JFrame {
 
         navigation.setBackground(new java.awt.Color(122, 178, 211));
         navigation.setPreferredSize(new java.awt.Dimension(150, 500));
-
-        partnersTab.setBackground(new java.awt.Color(122, 178, 211));
-        partnersTab.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        partnersTab.setForeground(new java.awt.Color(255, 255, 255));
-        partnersTab.setIcon(new javax.swing.ImageIcon(getClass().getResource("/clients-icon.png"))); // NOI18N
-        partnersTab.setText("Clientes");
-        partnersTab.setBorder(null);
-        partnersTab.setIconTextGap(10);
-        partnersTab.setPreferredSize(new java.awt.Dimension(150, 50));
-        partnersTab.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                buttonMouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                buttonMouseExited(evt);
-            }
-        });
-        partnersTab.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                switchToPartners(evt);
-            }
-        });
 
         projectsTab.setBackground(new java.awt.Color(122, 178, 211));
         projectsTab.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
@@ -179,7 +155,6 @@ public class EmployeeAppView extends javax.swing.JFrame {
         navigation.setLayout(navigationLayout);
         navigationLayout.setHorizontalGroup(
             navigationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(partnersTab, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(projectsTab, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(profileTab, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
@@ -187,12 +162,10 @@ public class EmployeeAppView extends javax.swing.JFrame {
             navigationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(navigationLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(partnersTab, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(projectsTab, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(profileTab, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(342, Short.MAX_VALUE))
+                .addContainerGap(398, Short.MAX_VALUE))
         );
 
         getContentPane().add(navigation, java.awt.BorderLayout.LINE_START);
@@ -301,6 +274,7 @@ public class EmployeeAppView extends javax.swing.JFrame {
     solicitada, definindo-a como conteúdo do openedPanel.
     */
     private void handleSwitch(Pages page, Object o, JButton button) {
+        if(o == null) o = employee;
         if(openedPanel != null) {
             openedPanel.setVisible(false);
             remove(openedPanel);
@@ -327,12 +301,6 @@ public class EmployeeAppView extends javax.swing.JFrame {
         // TODO add your handling code here:
         updateVisualization();
     }//GEN-LAST:event_updateVisualizationClick
-
-    //Ao clicar em Parceiros, exibe conteúdo da tela em questão
-    private void switchToPartners(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_switchToPartners
-        // TODO add your handling code here:
-        handleSwitch(Pages.PARTNERS, null, (JButton) evt.getSource());
-    }//GEN-LAST:event_switchToPartners
 
     private void projectsTabbuttonMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_projectsTabbuttonMouseEntered
         // TODO add your handling code here:
@@ -370,7 +338,6 @@ public class EmployeeAppView extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuBar menu;
     private javax.swing.JPanel navigation;
-    private javax.swing.JButton partnersTab;
     private javax.swing.JButton profileTab;
     private javax.swing.JButton projectsTab;
     private javax.swing.JMenuItem updateVisualizationButton;

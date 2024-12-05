@@ -13,7 +13,6 @@ import java.util.Arrays;
 public enum Department {
     
     DEV("Desenvolvimento"),
-    SUPPORT("Suporte ao Cliente"),
     PMO("Gerência de Projetos"),
     ADMIN("Administração");
     

@@ -4,6 +4,11 @@
  */
 package br.edu.veigadealmeida.trabalho.util;
 
+import br.edu.veigadealmeida.trabalho.model.Employee;
+import br.edu.veigadealmeida.trabalho.view.AdminAppView;
+import br.edu.veigadealmeida.trabalho.view.CustomerAppView;
+import br.edu.veigadealmeida.trabalho.view.EmployeeAppView;
+import br.edu.veigadealmeida.trabalho.view.PMPAppView;
 import java.awt.Component;
 import java.util.UUID;
 import javax.swing.JOptionPane;
@@ -104,5 +109,11 @@ public class Util {
     
     public static String generateId() {
         return UUID.randomUUID().toString().split("-")[0];
+    }
+    
+    public static void requestEmployeeDispose() {
+        AdminAppView.requestDispose();
+        PMPAppView.requestDispose();
+        EmployeeAppView.requestDispose();
     }
 }

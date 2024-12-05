@@ -18,10 +18,13 @@ import br.edu.veigadealmeida.trabalho.model.Employee;
 import br.edu.veigadealmeida.trabalho.model.Model;
 import br.edu.veigadealmeida.trabalho.model.Project;
 import br.edu.veigadealmeida.trabalho.model.enums.Department;
-import br.edu.veigadealmeida.trabalho.model.enums.ProjectStatus;
+import br.edu.veigadealmeida.trabalho.model.enums.Status;
+import br.edu.veigadealmeida.trabalho.util.Util;
 import br.edu.veigadealmeida.trabalho.view.project.AddProjectView;
+import br.edu.veigadealmeida.trabalho.view.project.DeleteProjectView;
 import br.edu.veigadealmeida.trabalho.view.project.ProjectPanel;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JSeparator;
@@ -42,6 +45,8 @@ public class ProjectsTab extends javax.swing.JPanel {
     private EmployeeManager employeeManager;
     private CustomerManager customerManager;
     private TaskManager taskManager;
+    
+    private final Map<String, Main.Func2<Project, String, Boolean>> columnFilters;
   
     
     /**
@@ -51,16 +56,37 @@ public class ProjectsTab extends javax.swing.JPanel {
     public ProjectsTab(Model model) {
         initComponents();
         this.model = model;
+        final String[] columns = new String[]{"Nome", "Descrição", "Cliente", "Funcionário Resp.", "Início", "Prazo", "Status"};
+        filterSelector.setModel(new DefaultComboBoxModel<>(columns));
+        columnFilters = Map.of(
+                columns[0], (p, s) -> p.getName().toLowerCase().contains(s.toLowerCase()),
+                columns[1], (p, s) -> p.getDescription().toLowerCase().contains(s.toLowerCase()),
+                columns[2], (p, s) -> p.getCustomer().toLowerCase().contains(s.toLowerCase()),
+                columns[3], (p, s) -> p.getResponsibleEmployee().toLowerCase().contains(s.toLowerCase()),
+                columns[4], (p, s) -> p.getStart().toString().toLowerCase().contains(s.toLowerCase()),
+                columns[5], (p, s) -> p.getEndTerm().toString().toLowerCase().contains(s.toLowerCase()),
+                columns[6], (p, s) -> p.getStatus().name().toLowerCase().contains(s.toLowerCase())
+        );
         if(!(model instanceof Employee) && !(model instanceof Customer)) return;
         projectManager = new ProjectManager(projectDatabase);
         employeeManager = new EmployeeManager(employeeDatabase);
         customerManager = new CustomerManager(customerDatabase);
         taskManager = new TaskManager(taskDatabase);
+        updateProjects(null);
+        if(model instanceof Customer || (model instanceof Employee employee && employee.getDepartment().ordinal() < Department.PMO.ordinal())) {
+            addButton.setEnabled(false);
+            deleteButton.setEnabled(false);
+        }
+    }
+
+    private void updateProjects(List<Project> list) {
+        projects.removeAll();
+        if(list == null) list = projectManager.getAllTypes();
         boolean first = true;
-        for(Project project : projectManager.getAllTypes()) {
-            if(project.getStatus() != ProjectStatus.FINISHED && project.getEndTerm() != null && new Date().after(project.getEndTerm())) {
+        for(Project project : list) {
+            if(project.getStatus() != Status.FINISHED && project.getEndTerm() != null && new Date().after(project.getEndTerm())) {
                 projectManager.getAllTypes().removeIf(p -> p.getName().equalsIgnoreCase(project.getName()));
-                project.setStatus(ProjectStatus.PENDING);
+                project.setStatus(Status.PENDING);
                 projectManager.getAllTypes().add(project);
                 projectDatabase.save(projectManager.getAllTypes());
             }
@@ -70,10 +96,8 @@ public class ProjectsTab extends javax.swing.JPanel {
             else projects.add(new JSeparator());
             projects.add(new ProjectPanel(model, project, projectManager, employeeManager, taskManager, customerManager));
         }
-        if(model instanceof Customer || (model instanceof Employee employee && employee.getDepartment().ordinal() < Department.PMO.ordinal()))
-            addButton.setEnabled(false);
     }
-
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -91,6 +115,7 @@ public class ProjectsTab extends javax.swing.JPanel {
         resetFilterButton = new javax.swing.JButton();
         buttonBar = new javax.swing.JPanel();
         addButton = new javax.swing.JButton();
+        deleteButton = new javax.swing.JButton();
         scrollPane = new javax.swing.JScrollPane();
         projects = new javax.swing.JPanel();
 
@@ -109,7 +134,7 @@ public class ProjectsTab extends javax.swing.JPanel {
         queryField.setPreferredSize(new java.awt.Dimension(64, 25));
         queryField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                queryFieldtypeQuery(evt);
+                typeQuery(evt);
             }
         });
 
@@ -118,7 +143,7 @@ public class ProjectsTab extends javax.swing.JPanel {
         filterButton.setPreferredSize(new java.awt.Dimension(75, 25));
         filterButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                filterButtontypeQuery(evt);
+                typeQuery(evt);
             }
         });
 
@@ -127,7 +152,7 @@ public class ProjectsTab extends javax.swing.JPanel {
         resetFilterButton.setPreferredSize(new java.awt.Dimension(125, 25));
         resetFilterButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                resetFilterButtonresetFilter(evt);
+                resetFilter(evt);
             }
         });
 
@@ -175,6 +200,13 @@ public class ProjectsTab extends javax.swing.JPanel {
             }
         });
 
+        deleteButton.setText("Remover Projeto");
+        deleteButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout buttonBarLayout = new javax.swing.GroupLayout(buttonBar);
         buttonBar.setLayout(buttonBarLayout);
         buttonBarLayout.setHorizontalGroup(
@@ -182,12 +214,16 @@ public class ProjectsTab extends javax.swing.JPanel {
             .addGroup(buttonBarLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(addButton)
-                .addContainerGap(749, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(deleteButton)
+                .addContainerGap(626, Short.MAX_VALUE))
         );
         buttonBarLayout.setVerticalGroup(
             buttonBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(buttonBarLayout.createSequentialGroup()
-                .addComponent(addButton)
+                .addGroup(buttonBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(addButton)
+                    .addComponent(deleteButton))
                 .addGap(0, 12, Short.MAX_VALUE))
         );
 
@@ -201,29 +237,45 @@ public class ProjectsTab extends javax.swing.JPanel {
         add(scrollPane);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void queryFieldtypeQuery(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_queryFieldtypeQuery
+    private void typeQuery(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_typeQuery
         // TODO add your handling code here:
-    }//GEN-LAST:event_queryFieldtypeQuery
+        filterTable();
+    }//GEN-LAST:event_typeQuery
 
-    private void filterButtontypeQuery(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_filterButtontypeQuery
-        // TODO add your handling code here:
-    }//GEN-LAST:event_filterButtontypeQuery
-
-    private void resetFilterButtonresetFilter(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resetFilterButtonresetFilter
+    private void resetFilter(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resetFilter
         // TODO add your handling code here:
         queryField.setText("");
-    }//GEN-LAST:event_resetFilterButtonresetFilter
+        filterTable();
+    }//GEN-LAST:event_resetFilter
 
     private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
         // TODO add your handling code here:
         new AddProjectView((Employee) model, projectManager, customerManager, employeeManager).setVisible(true);
     }//GEN-LAST:event_addButtonActionPerformed
+
+    private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
+        // TODO add your handling code here:
+        if(projectManager.getAllTypes().isEmpty()) {
+            Util.showError(this, "Nenhum projeto cadastrado.");
+            return;
+        }
+        new DeleteProjectView(projectManager).setVisible(true);
+    }//GEN-LAST:event_deleteButtonActionPerformed
                      
-    
+        //Função que filtra a tabela com base no campo selcionado e no texto da barra de pesquisa
+    private void filterTable() {
+        Main.Func2<Project, String, Boolean> func = columnFilters.get(filterSelector.getItemAt(filterSelector.getSelectedIndex())); //Recupera a função que valida os funcionários com base no filtro em questão
+        if(func == null) return; //Caso não exista uma função de filtragem definida para o campo em questão, parar aqui
+        String query = queryField.getText(); //Texto que precisa estar contido (texto da barra de busca)
+        List<Project> list = projectManager.getAllTypes().stream().filter(project -> func.make(project, query)).toList();
+        updateProjects(list);
+        revalidate(); //revalidate() serve pra atualizar a visualização para o usuário (nativo do Swing)
+    } 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addButton;
     private javax.swing.JPanel buttonBar;
+    private javax.swing.JButton deleteButton;
     private javax.swing.JButton filterButton;
     private javax.swing.JComboBox<String> filterSelector;
     private javax.swing.JPanel projects;

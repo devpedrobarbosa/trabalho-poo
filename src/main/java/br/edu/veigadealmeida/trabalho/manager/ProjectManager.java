@@ -22,4 +22,17 @@ public class ProjectManager extends Manager<String, Project> {
     public String[][] toDataArray(List<Project> list) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
+    
+    public String[][] toResumedDataArray(List<Project> list) {
+        String[][] data = new String[list.size()][3];
+        for(int i = 0; i < list.size(); i++) {
+            Project project = list.get(i);
+            if(project == null)
+                continue;
+            data[i][0] = project.getName();
+            data[i][1] = project.getCustomer();
+            data[i][2] = project.getStatus().getDisplayName();
+        }
+        return data;
+    }
 }
